@@ -218,6 +218,7 @@
 \NewDocumentCommand{\degree}{m}{\newcommand{\degreename}{#1}}
 \NewDocumentCommand{\addresses}{m}{\newcommand{\addressname}{#1}}
 \NewDocumentCommand{\university}{m}{\newcommand{\univname}{#1}}
+\NewDocumentCommand{\campus}{m}{\newcommand{\campname}{#1}}
 \NewDocumentCommand{\department}{m}{\newcommand{\deptname}{#1}}
 \NewDocumentCommand{\group}{m}{\newcommand{\groupname}{#1}}
 \NewDocumentCommand{\faculty}{m}{\newcommand{\facname}{#1}}
