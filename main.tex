@@ -48,6 +48,7 @@ headsepline, % Uncomment to get a line under the header
 \addbibresource{example.bib} % The filename of the bibliography
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
+\usepackage{comment}
 
 %----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
@@ -102,7 +103,7 @@ headsepline, % Uncomment to get a line under the header
 \begin{center}
 
 \vspace*{.06\textheight}
-{\scshape\Large \univname\\\large\campname\par}\vspace{1.5cm} % University name
+{\scshape\large \MakeUppercase{\univname}\\\campname\par}\vspace{1.5cm} % University name
 \textsc{\deptname\\\facname}\\ % Thesis type
 
 \vfill
@@ -176,6 +177,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 
 \end{abbreviations}
 
+\begin{comment}
 %----------------------------------------------------------------------------------------
 %	PHYSICAL CONSTANTS/OTHER DEFINITIONS
 %----------------------------------------------------------------------------------------
@@ -210,6 +212,8 @@ $\omega$ & angular frequency & \si{\radian} \\
 %----------------------------------------------------------------------------------------
 
 \dedicatory{For/Dedicated to/To my\ldots} 
+
+\end{comment}
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - CHAPTERS

@@ -362,7 +362,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 		\thispagestyle{plain}
 		\begin{center}
 			{\normalsize \MakeUppercase{\univname} \par}% University name in capitals
-			{\normalsize \MakeUppercase{\campname} \par}% University name in capitals
+			{\normalsize \MakeUppercase{\campname} \par}% Campus name in capitals
 			\bigskip
 			{\huge\textit{\abstractname} \par}
 			\bigskip
