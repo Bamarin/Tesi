@@ -3,7 +3,7 @@
 % LaTeX Template
 % Version 2.5 (27/8/17)
 %
-% This template was downloaded from:
+% The original template was downloaded from:
 % http://www.LaTeXTemplates.com
 %
 % Version 2.x major modifications by:
@@ -16,6 +16,8 @@
 % Template license:
 % CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
 %
+% Revisited and adapted to fit unibo format
+% by Leonardo Marini 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %----------------------------------------------------------------------------------------
@@ -45,7 +47,7 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
-\addbibresource{example.bib} % The filename of the bibliography
+\addbibresource{bibliography.bib} % The filename of the bibliography
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 \usepackage{comment}
@@ -87,6 +89,7 @@ headsepline, % Uncomment to get a line under the header
 \hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
 \hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
 \hypersetup{pdfkeywords=\keywordnames} % Set the PDF's keywords to your keywords
+\hypersetup{colorlinks=false}
 }
 
 \begin{document}
@@ -130,7 +133,7 @@ headsepline, % Uncomment to get a line under the header
  
 \vfill
 
-{\large Anno Accademico 2019 --- 2020}\\[4cm] % Date
+{\large Anno Accademico 2018 --- 2019}\\[4cm] % Date
 %\includegraphics{Logo} % University/department logo - uncomment to place it
  
 \vfill
@@ -144,7 +147,29 @@ headsepline, % Uncomment to get a line under the header
 \renewcommand{\abstractname}{Abstract}
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
-The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
+
+Questa tesi vuole mostrare il processo di produzione di un cortometraggio.
+\section{Perché (un cotometraggio)?}
+La scelta di un cortometraggio deriva da
+- cortometraggio piuttosto che videogioco
+- uras: storia
+
+
+\section{methodology.. come?}
+\ldots tecniche che mirano a semplificare il lavoro dell'animatore\ldots
+
+\section{risultati}
+
+\section{conclusioni}
+
+
+
+
+\ldots da un punto di vista progettuale\ldots
+
+\ldots scelte di design\ldots
+
+
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -153,7 +178,13 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 
 \begin{acknowledgements}
 \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
-The acknowledgments and the people to thank go here, don't forget to include your project advisor\ldots
+Persone da ringraziare\ldots
+\begin{itemize}
+    \item relatore
+    \item familiari
+    \item amici
+\end{itemize}
+
 \end{acknowledgements}
 
 %----------------------------------------------------------------------------------------
@@ -174,6 +205,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 
 \textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere\\
 \textbf{WSF} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or\\
+\textbf{TBR} & \textbf{T}o \textbf{B}e \textbf{R}emoved\\
 
 \end{abbreviations}
 
@@ -227,9 +259,9 @@ $\omega$ & angular frequency & \si{\radian} \\
 % Uncomment the lines as you write the chapters
 
 \include{Chapters/Chapter1}
-%\include{Chapters/Chapter2} 
-%\include{Chapters/Chapter3}
-%\include{Chapters/Chapter4} 
+\include{Chapters/Chapter2} 
+\include{Chapters/Chapter3}
+\include{Chapters/Chapter4} 
 %\include{Chapters/Chapter5} 
 
 %----------------------------------------------------------------------------------------
@@ -241,7 +273,7 @@ $\omega$ & angular frequency & \si{\radian} \\
 % Include the appendices of the thesis as separate files from the Appendices folder
 % Uncomment the lines as you write the Appendices
 
-\include{Appendices/AppendixA}
+\include{Appendices/AppendixTemplate}
 %\include{Appendices/AppendixB}
 %\include{Appendices/AppendixC}
 
