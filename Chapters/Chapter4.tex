@@ -9,4 +9,22 @@
 %----------------------------------------------------------------------------------------
 
 \section{Progettazione generale}
+
+Production oriented
+
+create object once, link in many scene instead of copying it.
+
+Armatures allows to animate objects even if they are linked :D
+
 \section{Progettazione delle animazioni}
+
+importanza di un rig semplice ed efficace per rendere facile il lavoro dell'animatore
+
+capire cosa serve (obiettivo) per rendere il rig il più semplice possibile
+
+scelta della giusta rappresentazione di rotazione (\ref{Section3.1}) basata sul numero di DOF per la giuntura
+
+nel caso di rotazione euleriana (max 2 DOF) scegliere l'ordine degl'assi basandosi su quali verrà effettuata la rotazione:
+- più usato -> esterno (terzo)
+- secondo più usato -> interno (primo)
+- meno usato/non usato -> secondo (causa gimbal lock)
