@@ -22,9 +22,11 @@ importanza di un rig semplice ed efficace per rendere facile il lavoro dell'anim
 
 capire cosa serve (obiettivo) per rendere il rig il più semplice possibile
 
+Trade-off, controllo VS velocità e semplicità d'uso
+
 scelta della giusta rappresentazione di rotazione (\ref{Section3.1}) basata sul numero di DOF per la giuntura
 
 nel caso di rotazione euleriana (max 2 DOF) scegliere l'ordine degl'assi basandosi su quali verrà effettuata la rotazione:
-- più usato -> esterno (terzo)
-- secondo più usato -> interno (primo)
+- più usato -> esterno,world/parent aligned (terzo)
+- secondo più usato -> interno local aligned (primo)
 - meno usato/non usato -> secondo (causa gimbal lock)
