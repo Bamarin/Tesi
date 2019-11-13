@@ -9,14 +9,16 @@ Di seguito vengono riportate alcune tecniche di animazione 3D, spiegandone le me
 
 
 \section{Rappresentazioni di rotazione}\label{Section3.1}
-Iniziamo spigando come si possa rappresentare una rotazione. Alcuni di questi concetti sono validi anche per altre trasformazioni, tuttavia prenderò in considerazione solo le rotazioni in quanto sono uno degli aspetti principali nella realizzazione di animazioni --- in particolare di animazioni 3D --- e anche uno dei più complessi.
+Iniziamo spigando come si possa rappresentare una rotazione. Alcuni di questi concetti sono validi anche per altre trasformazioni, tuttavia verranno considerate soltanto le rotazioni, in quanto queste ultime sono uno degli aspetti principali nella realizzazione di animazioni --- in particolare di animazioni 3D --- e alla base di alcune tecniche di animazione --- \emph{Inverse Kinematiks} (IK) --- come anche uno dei più complessi. 
+
+Come vedremo in seguito sarà indispensabile capire quale delle seguenti rappresentazioni conviene utilizzare in base all'animazione che si vuole realizzare.
 
 
 \subsection{Angolo-asse}
 Questo tipo di rappresentazione è senza dubbio la più semplice.
 Utilizza 4 valori: 3 per specificare l'asse, ed 1 per l'angolo. In questo modo, con una singola rotazione, è possibile raggiungere qualsiasi orientamento dell'oggetto che si sta ruotando. Così come esiste sempre una linea retta che collega due punti nello spazio, si può pensare ad una rotazione angolo-asse come una singola rotazione che collega due orientamenti.
 
-Questa rappresentazione, è ottima per rotazioni di giunture con un solo DOF, mentre il suo comportamento può diventare contro intuitivo per giunture con più di un DOF. Inoltre anche la rappresentazione dell'asse attraverso 3 componenti numeriche non risulta di facile comprensione.
+Questa rappresentazione, è ottima per rotazioni di articolazioni con un solo \emph{Degree Of Freedom} (DOF). È anche possibile definire articolazioni con più di un DOF semplicemente concatenando $n$ articolazioni su singolo asse connesse da $n-1$ ossa di lunghezza 0. Ciò però rende la risultante giuntura inutilmente complessa da animare. Per questo motivo le rappresentazione con angoli di Eulero, o sotto forma di quaternione, sono quelle più spesso utilizzate. Inoltre la rappresentazione dell'asse attraverso 3 componenti numeriche non risulta di facile comprensione per l'utente che di solito preferisce usare quella Euleriana anche per rotazioni su singolo asse.
 
 \subsection{Euleriana}
 
@@ -35,7 +37,7 @@ Questa rappresentazione, è ottima per rotazioni di giunture con un solo DOF, me
   \label{fig:sub2}
 \end{subfigure}
 \decoRule
-\caption[Rotazione euleriana]{Rappresentazione di rotazione euleriana attraverso un giroscopio a tre assi}
+\caption[Rotazione Euleriana]{Rappresentazione di rotazione Euleriana attraverso un giroscopio a tre assi}
 \label{fig:euler1}
 \end{figure}
 
@@ -70,14 +72,20 @@ Per rendere tutto ciò possibile servono 4 componenti (X, Y, Z, W), come già de
 La ragione per cui i due punti sulla sfera rappresentano una rotazione di 180\textdegree\ anziché 90\textdegree\ e resa necessaria siccome altrimenti questi due punti coinciderebbero nel punto più basso della sfera. Come effetto aggiuntivo possiamo rappresentare rotazioni fino a 720\textdegree\ ed ogni orientamento equivale a due possibili rotazioni dando all'animatora l'abilità di decidere in che verso ruotare l'oggetto durante un'animazione. 
 
 \subsection{Matriciale}
-Quest'ultima è probabilmente la rappresentazione più ottimale in termini di flessibilità, in quanto permette di rappresentare anche traslazioni, scalature e altre trasformazioni come \emph{shear}. È, infatti, la rappresentazione che blender utilizza internamente \cite{blendApi} \cite{nat2012rig} poiché quella che offre la maggior flessibilità. L'unico difetto è che, come la rappresentazione sotto forma di quaternione, non mantiene l'informazione sul percorso della rotazione. Infatti è ancora più simile a una delta-rotazione (i.e. differenza di orientamento), rispetto ad un quaternione poiché copre una rotazione di soli 360\textdegree, rispetto ai 720\textdegree\ del quaternione. 
+Quest'ultima è probabilmente la rappresentazione più ottimale in termini di flessibilità, in quanto permette di rappresentare anche traslazioni, scalature e altre trasformazioni come \emph{shear}. È, infatti, la rappresentazione che blender utilizza internamente \cite{blendApi} \cite{nat2012rig} proprio perché offre la maggior flessibilità.
+
+Siccome permette di rappresentare qualsiasi tipo di trasformazione, questa struttura viene solitamente chiamata \emph{Matrice di Trasformazione}. Nel caso di uno spazio a 3 dimensioni, essa ha dimensione $4\times4$.
+
+Questa sua caratteristica la rende indispensabile per rappresentare articolazioni formate da più ossa (i.e Kinematiks Linkages) che verranno illustrati qui di seguito (sezioni \ref{sectionFK} e \ref{sectionIK}), poiché rende possibile convertire le coordinate locali di un osso figlio a quelle locali del suo padre, fino ad arrivare alle coordinate globali.
+
+L'unico difetto è che, come la rappresentazione sotto forma di quaternione, non mantiene l'informazione sul percorso della rotazione. Infatti è ancora più simile a una delta-rotazione (i.e. differenza di orientamento), rispetto ad un quaternione poiché copre una rotazione di soli 360\textdegree, rispetto ai 720\textdegree\ del quaternione. 
 
 
-\section{Forward Kinematics}
+\section{Forward Kinematics} \label{sectionFK}
 Controllo preciso su ogni DOF
 
 Difficile animare azioni comuni in cui gli arti si muovono in uno spazio non relativo al resto del corpo (e.g. aprire una porta tenendo la mano sulla maniglia, la mano si sposta relativamente alla posizione della porta, non del corpo)
-\section{Inverse Kinematics}
+\section{Inverse Kinematics} \label{sectionIK}
 Definite la posizione del target (mano) e della radice (spalla) la posizione delle ossa intermedie viene calcolata da un algoritmo (e.g. the Jacobian \cite{Parent:2012:CAA:2385444} e iTaSC \cite{blendWiki}).
 
 A volte non esiste soluzione (mano troppo lontana dalla spalla) e il risultato dev'essere approssimato.
