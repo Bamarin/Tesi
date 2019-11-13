@@ -5,11 +5,11 @@
 \label{Chapter3} % For referencing this chapter elsewhere, use \ref{ChapterX}
 
 Animare significa ``muovere" un modello, altrimenti statico, nel tempo. Questi movimenti sono definiti attraverso delle trasformazioni geometriche (traslazione, rotazione e scalatura).
-Di seguito vengono riportate alcune tecniche di animazione 3D, spiegandone le metodologie, i pregi, i difetti e il contesto in cui possono venire utilizzate.
+Di seguito vengono riportate alcune tecniche di animazione 3D, spiegandone le metodologie, i pregi, i difetti e il contesto in cui possono venire utilizzate. 
 
 
 \section{Rappresentazioni di rotazione}\label{Section3.1}
-Iniziamo spigando come si possa rappresentare una rotazione. Alcuni di questi concetti sono validi anche per altre trasformazioni, tuttavia verranno considerate soltanto le rotazioni, in quanto queste ultime sono uno degli aspetti principali nella realizzazione di animazioni --- in particolare di animazioni 3D --- e alla base di alcune tecniche di animazione --- \emph{Inverse Kinematiks} (IK) --- come anche uno dei più complessi. 
+Iniziamo spigando come si possa rappresentare una rotazione. Alcuni di questi concetti sono validi anche per altre trasformazioni, tuttavia verranno considerate soltanto le rotazioni, in quanto queste ultime sono uno degli aspetti principali nella realizzazione di animazioni --- in particolare di animazioni 3D --- e alla base di alcune tecniche di animazione --- \emph{Inverse Kinematics} (IK) --- come anche uno dei più complessi. 
 
 Come vedremo in seguito sarà indispensabile capire quale delle seguenti rappresentazioni conviene utilizzare in base all'animazione che si vuole realizzare.
 
@@ -18,7 +18,7 @@ Come vedremo in seguito sarà indispensabile capire quale delle seguenti rappres
 Questo tipo di rappresentazione è senza dubbio la più semplice.
 Utilizza 4 valori: 3 per specificare l'asse, ed 1 per l'angolo. In questo modo, con una singola rotazione, è possibile raggiungere qualsiasi orientamento dell'oggetto che si sta ruotando. Così come esiste sempre una linea retta che collega due punti nello spazio, si può pensare ad una rotazione angolo-asse come una singola rotazione che collega due orientamenti.
 
-Questa rappresentazione, è ottima per rotazioni di articolazioni con un solo \emph{Degree Of Freedom} (DOF). È anche possibile definire articolazioni con più di un DOF semplicemente concatenando $n$ articolazioni su singolo asse connesse da $n-1$ ossa di lunghezza 0. Ciò però rende la risultante giuntura inutilmente complessa da animare. Per questo motivo le rappresentazione con angoli di Eulero, o sotto forma di quaternione, sono quelle più spesso utilizzate. Inoltre la rappresentazione dell'asse attraverso 3 componenti numeriche non risulta di facile comprensione per l'utente che di solito preferisce usare quella Euleriana anche per rotazioni su singolo asse.
+Questa rappresentazione, è ottima per rotazioni di articolazioni con un solo \emph{Degree Of Freedom} (DOF). È anche possibile definire articolazioni con più di un DOF semplicemente concatenando $n$ articolazioni su singolo asse connesse da $n-1$ ossa (i.e. oggetti connessi in un'articolazione) di lunghezza 0. Ciò però rende la risultante giuntura inutilmente complessa da animare. Per questo motivo le rappresentazione con angoli di Eulero, o sotto forma di quaternione, sono quelle più spesso utilizzate. Inoltre la rappresentazione dell'asse attraverso 3 componenti numeriche non risulta di facile comprensione per l'utente che di solito preferisce usare quella Euleriana anche per rotazioni su singolo asse.
 
 \subsection{Euleriana}
 
@@ -46,7 +46,7 @@ Concettualmente è la più intuitiva di tutte: utilizza 3 assi di rotazione (X, 
     \item ordine degli assi;
     \item gimbal lock problem.
 \end{enumerate}
-L'ordine degli assi è decisivo, in quanto quello più interno dipende dalla rotazione di quelli esterni. Di conseguenza ruotando gli assi in un ordine diverso da quello specificato porta a risultati diversi da quello atteso. In più, interpolazioni tra diversi orientamenti, possono a loro volta risultare non gradevoli, poiché la rotazione viene spezzata in 3 movimenti.
+L'ordine degli assi è decisivo, in quanto quello più interno dipende dalla rotazione di quelli esterni. Di conseguenza ruotando gli assi in un ordine diverso da quello specificato porta a risultati diversi da quello atteso. In più, interpolazioni tra diversi orientamenti, possono a loro volta risultare sgradevoli, poiché la rotazione viene spezzata in 3 movimenti.
 
 Il problema del gimbal lock \parencite{anticz16}, in italiano blocco cardanico, sorge dall'allineamento di due assi: quello più interno e quello più esterno. Ne deriva che ruotano uno di questi 2 assi si ottiene la stessa rotazione, perdendo quindi un DOF.
 È quindi importante scegliere l'ordine degli assi in maniera tale che il primo e il terzo non risultino mai allineati.
@@ -76,19 +76,27 @@ Quest'ultima è probabilmente la rappresentazione più ottimale in termini di fl
 
 Siccome permette di rappresentare qualsiasi tipo di trasformazione, questa struttura viene solitamente chiamata \emph{Matrice di Trasformazione}. Nel caso di uno spazio a 3 dimensioni, essa ha dimensione $4\times4$.
 
-Questa sua caratteristica la rende indispensabile per rappresentare articolazioni formate da più ossa (i.e Kinematiks Linkages) che verranno illustrati qui di seguito (sezioni \ref{sectionFK} e \ref{sectionIK}), poiché rende possibile convertire le coordinate locali di un osso figlio a quelle locali del suo padre, fino ad arrivare alle coordinate globali.
+Questa sua caratteristica la rende indispensabile per rappresentare articolazioni formate da più ossa (i.e Kinematics Linkages) che verranno illustrati qui di seguito (sezioni \ref{sectionFK} e \ref{sectionIK}), poiché rende possibile convertire le coordinate locali di un osso figlio a quelle locali del suo padre, fino ad arrivare alle coordinate globali.
 
 L'unico difetto è che, come la rappresentazione sotto forma di quaternione, non mantiene l'informazione sul percorso della rotazione. Infatti è ancora più simile a una delta-rotazione (i.e. differenza di orientamento), rispetto ad un quaternione poiché copre una rotazione di soli 360\textdegree, rispetto ai 720\textdegree\ del quaternione. 
 
-
+\newpage
 \section{Forward Kinematics} \label{sectionFK}
-Controllo preciso su ogni DOF
+Per figure complesse, come quella umana (da qui in avanti tutti gli esempi saranno riferiti alla figura umana, siccome, nella realizzazione del corto, è stata il centro della maggior parte delle animazioni), è utile avere un sistema che permetta di posizionare le sue componenti in maniera relativa ad altre. Per esempio, una volta posizionato il busto, posizionare il braccio, poi la mano ed in fine le dita, tutto in maniera relativa a quanto posizionato in precedenza.
 
-Difficile animare azioni comuni in cui gli arti si muovono in uno spazio non relativo al resto del corpo (e.g. aprire una porta tenendo la mano sulla maniglia, la mano si sposta relativamente alla posizione della porta, non del corpo)
+Questa tecnica permette infatti di specificare, attraverso una rotazione, la posizione di un osso (dell'armatura) relativa al suo osso padre. Per questo motivo serve che le ossa di un'armatura siano organizzate in maniera gerarchica (i.e. ad albero). In questo modo, quando l'armatura viene posizionata basterà moltiplicare tutte le matrici di trasformazione dalla radice ai nodi foglia in maniera \emph{deep-first}.
+
+Controllo preciso su ogni DOF...
+Per definire una posa è quindi necessario specificare la rotazione di ogni osso. Questo permette un controllo preciso su ogni DOF dell'armatura, il che è ottimo, perché permette all'animatore di realizzare pose perfette, senza lasciare che nulla venga calcolato automaticamente. 
+
+Lo svantaggio è che questa metodologia rende difficile animare azioni comuni in cui gli arti si muovono in uno spazio non relativo al resto del corpo, ma rispetto allo spazio circostante. Ad esempio, per aprire una porta tenendo la mano sulla maniglia, il corpo si può spostare di lato, ma la mano deve rimanere aggrappata alla maniglia.
+
+Con una metodologia FK l'animatore dovrebbe spostare il corpo e, ogni volta, riposizionare la mano sulla maniglia, introducendo un sacco di \emph{counter-animation}, ovvero l'animazione inversa per riposizionare la mano nella posizione in cui era prima del movimento del resto del corpo.
+
 \section{Inverse Kinematics} \label{sectionIK}
-Definite la posizione del target (mano) e della radice (spalla) la posizione delle ossa intermedie viene calcolata da un algoritmo (e.g. the Jacobian \cite{Parent:2012:CAA:2385444} e iTaSC \cite{blendWiki}).
+Definite la posizione della mano e della radice (spalla) la posizione delle ossa intermedie viene calcolata da un algoritmo (e.g. the Jacobian \cite{Parent:2012:CAA:2385444} e iTaSC \cite{blendWiki}).
 
-A volte non esiste soluzione (mano troppo lontana dalla spalla) e il risultato dev'essere approssimato.
+A volte non esiste nessuna soluzione (mano troppo lontana dalla spalla) e il risultato dev'essere approssimato.
 
 Peggio è se esiste più di una soluzione (undercostrained problem, molto probabile). In tal caso il risultato è scelto dall'algoritmo da una delle possibili soluzioni. Non sempre però tutte sono realistiche o visivamente gradevoli.
 
