@@ -27,18 +27,22 @@ Questa rappresentazione, è ottima per rotazioni di articolazioni con un solo \e
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{Figures/euler-1.jpg}
-  \caption{Posizione neutra}
-  \label{fig:sub1}
+  \caption{Posizione neutra.}
+  \label{fig:eulerA}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{Figures/euler-2.jpg}
-  \caption{Gimbal lock, l'asse X e Z sono allineati}
-  \label{fig:sub2}
+  \caption{Gimbal lock, l'asse X e Z sono allineati.}
+  \label{fig:eulerB}
 \end{subfigure}
 \decoRule
-\caption[Rotazione Euleriana]{Rappresentazione di rotazione Euleriana attraverso un giroscopio a tre assi}
-\label{fig:euler1}
+\caption[Rotazione Euleriana]{Rappresentazione di rotazione Euleriana attraverso un giroscopio a tre assi.}
+  \begin{minipage}{.8\textwidth}
+  \footnotesize
+  \emph{(Immagine di Nathan Vegdahl)}
+  \end{minipage}
+\label{fig:euler}
 \end{figure}
 
 Concettualmente è la più intuitiva di tutte: utilizza 3 assi di rotazione (X, Y, Z) ed il funzionamento è analogo a quello di un giroscopio. ogni asse offre un DOF, quindi sono possibili rotazioni con 3 DOF. Tuttavia sono necessarie due accortezze: 
@@ -58,7 +62,7 @@ Per ovviare a questo problema può essere conveniente bloccare uno degli assi in
 \centering
 \includegraphics[width=.8\textwidth]{Figures/3d-sphere}
 \decoRule
-\caption[Quaternione 2D]{Rappresentazione di un quaternione 2D su una sfera 3D}
+\caption[Quaternione 2D]{Rappresentazione di un quaternione 2D su una sfera 3D.}
 \label{fig:quater}
 \end{figure}
 In contrasto a quanto appena visto, la forma di quaternione è concettualmente complessa, ma in pratica diventa molto utile e senza molti dei difetti della controparte Euleriana.
@@ -76,22 +80,41 @@ Quest'ultima è probabilmente la rappresentazione più ottimale in termini di fl
 
 Siccome permette di rappresentare qualsiasi tipo di trasformazione, questa struttura viene solitamente chiamata \emph{Matrice di Trasformazione}. Nel caso di uno spazio a 3 dimensioni, essa ha dimensione $4\times4$.
 
-Questa sua caratteristica la rende indispensabile per rappresentare articolazioni formate da più ossa (i.e Kinematics Linkages) che verranno illustrati qui di seguito (sezioni \ref{sectionFK} e \ref{sectionIK}), poiché rende possibile convertire le coordinate locali di un osso figlio a quelle locali del suo padre, fino ad arrivare alle coordinate globali.
+Questa sua caratteristica la rende indispensabile per rappresentare articolazioni formate da più ossa (i.e Kinematics Linkages) che verranno illustrati qui di seguito (sezioni \ref{sectionFK} e \ref{sectionIK}), poiché rende possibile convertire le coordinate locali di un osso (rappresentato in Figura \ref{fig:FK}, evidenziato in azzurro) figlio a quelle locali del suo padre, fino ad arrivare alle coordinate globali.
 
 L'unico difetto è che, come la rappresentazione sotto forma di quaternione, non mantiene l'informazione sul percorso della rotazione. Infatti è ancora più simile a una delta-rotazione (i.e. differenza di orientamento), rispetto ad un quaternione poiché copre una rotazione di soli 360\textdegree, rispetto ai 720\textdegree\ del quaternione. 
 
 \newpage
 \section{Forward Kinematics} \label{sectionFK}
+
+\begin{figure}
+\centering
+\begin{subfigure}{.33\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/armature1}
+  \label{fig:FK1}
+\end{subfigure}%
+\begin{subfigure}{.33\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/armature2}
+  \label{fig:FK1}
+\end{subfigure}%
+\begin{subfigure}{.33\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/armature3}
+  \label{fig:FK3}
+\end{subfigure}
+\decoRule
+\caption[Forward Kinematic]{Esempio di posizionamento tramite Forward Kinematic. La figura rappresenta la stessa armatura, formata da diverse ossa, in tre posizioni differenti.}
+\label{fig:FK}
+\end{figure}
+
 Per figure complesse, come quella umana (da qui in avanti tutti gli esempi saranno riferiti alla figura umana, siccome, nella realizzazione del corto, è stata il centro della maggior parte delle animazioni), è utile avere un sistema che permetta di posizionare le sue componenti in maniera relativa ad altre. Per esempio, una volta posizionato il busto, posizionare il braccio, poi la mano ed in fine le dita, tutto in maniera relativa a quanto posizionato in precedenza.
 
-Questa tecnica permette infatti di specificare, attraverso una rotazione, la posizione di un osso (dell'armatura) relativa al suo osso padre. Per questo motivo serve che le ossa di un'armatura siano organizzate in maniera gerarchica (i.e. ad albero). In questo modo, quando l'armatura viene posizionata basterà moltiplicare tutte le matrici di trasformazione dalla radice ai nodi foglia in maniera \emph{deep-first}.
-
-Controllo preciso su ogni DOF...
+Questa tecnica permette infatti di specificare, attraverso una rotazione, la posizione di un osso relativa al suo osso padre. Per questo motivo serve che le ossa di un'armatura (vedi Figura \ref{fig:FK}) siano organizzate in maniera gerarchica (i.e. ad albero). In questo modo, quando l'armatura viene posizionata basterà moltiplicare tutte le matrici di trasformazione dalla radice ai nodi foglia in maniera \emph{deep-first}. 
 Per definire una posa è quindi necessario specificare la rotazione di ogni osso. Questo permette un controllo preciso su ogni DOF dell'armatura, il che è ottimo, perché permette all'animatore di realizzare pose perfette, senza lasciare che nulla venga calcolato automaticamente. 
 
-Lo svantaggio è che questa metodologia rende difficile animare azioni comuni in cui gli arti si muovono in uno spazio non relativo al resto del corpo, ma rispetto allo spazio circostante. Ad esempio, per aprire una porta tenendo la mano sulla maniglia, il corpo si può spostare di lato, ma la mano deve rimanere aggrappata alla maniglia.
-
-Con una metodologia FK l'animatore dovrebbe spostare il corpo e, ogni volta, riposizionare la mano sulla maniglia, introducendo un sacco di \emph{counter-animation}, ovvero l'animazione inversa per riposizionare la mano nella posizione in cui era prima del movimento del resto del corpo.
+Lo svantaggio è che questa metodologia rende difficile animare azioni comuni in cui gli arti si muovono in uno spazio non relativo al resto del corpo, ma rispetto allo spazio circostante. Ad esempio, per aprire una porta tenendo la mano sulla maniglia, il corpo si può spostare di lato, ma la mano deve rimanere aggrappata alla maniglia. Con una metodologia FK, l'animatore dovrebbe infatti spostare il corpo e, ogni volta, riposizionare la mano sulla maniglia, introducendo un sacco di \emph{counter-animation}, ovvero l'animazione inversa per riposizionare la mano nella posizione in cui era prima del movimento del resto del corpo.
 
 \section{Inverse Kinematics} \label{sectionIK}
 Definite la posizione della mano e della radice (spalla) la posizione delle ossa intermedie viene calcolata da un algoritmo (e.g. the Jacobian \cite{Parent:2012:CAA:2385444} e iTaSC \cite{blendWiki}).
