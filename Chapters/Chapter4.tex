@@ -4,6 +4,10 @@
 
 \label{Chapter4} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
+Così come nella progettazione di un software si passa dall'analisi alla sua progettazione, prima di svilupparlo. Anche in questo caso, è opportuno progettare l'intero cortometraggio, prima di realizzarlo.
+Questo è un passaggio importante poiché non solo permette di capire come il prodotto dovrà essere realizzato, ma permette anche di stabilire delle convenzioni standard (e.g. nomi dei file) da mantenere durante il progetto.
+Quest'ultimo aspetto è indispensabile soprattutto nel caso in cui ci siano più persone a lavorare allo stesso progetto.
+
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
@@ -12,13 +16,24 @@
 
 Production oriented
 
+
+
 create object once, link in many scene instead of copying it.
 
 Armatures allows to animate objects even if they are linked :D
 
 \section{Progettazione delle animazioni}
 
-Rig: strumento che verrà utilizzato da altri
+Quando si tratta di sviluppare qualcosa di complesso come una figura umana, è opportuno progettarla, per trovare un modello di astrazione che la semplifichi, pur mantenendo le proprietà che ci interessano e quindi ci permetta di animarla in maniera efficiente.
+Il corpo umano è infatti composto da circa duecento DOF \cite{Parent:2012:CAA:2385444}.
+Nonostante ciò, la struttura esteriore è fondamentalmente composta da un'unica mesh.
+Quindi, rispetto a quanto visto fin'ora, dove la struttura da animare era un'armatura composta da più ossa, sarà necessario deformare la mesh per adattarla all'armatura sottostante.
+
+Per fare ciò sarà necessario 
+
+definire un \emph{rig}, fondamentalmente 
+
+strumento che verrà utilizzato da altri
 
 usabilità
 
@@ -35,3 +50,5 @@ nel caso di rotazione euleriana (max 2 DOF) scegliere l'ordine degl'assi basando
 - più usato -> esterno,world/parent aligned (terzo)
 - secondo più usato -> interno local aligned (primo)
 - meno usato/non usato -> secondo (causa gimbal lock)
+
+Animazione straight ahead vs pose-to-pose (mixing between the 2)
