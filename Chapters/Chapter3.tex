@@ -1,6 +1,7 @@
 % Chapter 3
 
-\chapter{Tecniche di animazione} % Design
+
+\chapter{Concetti di animazione} % Design
 
 \label{Chapter3} % For referencing this chapter elsewhere, use \ref{ChapterX}
 
@@ -57,6 +58,7 @@ Il problema del gimbal lock \parencite{anticz16}, in italiano blocco cardanico, 
 
 Per ovviare a questo problema può essere conveniente bloccare uno degli assi in una posizione fissa. Per questo motivo, la forma Euleriana è meglio utilizzata nelle giunture con 1 o 2 DOF.
 
+\newpage
 \subsection{Quaternione}
 \begin{figure}[ht]
 \centering
@@ -85,7 +87,7 @@ Questa sua caratteristica la rende indispensabile per rappresentare articolazion
 L'unico difetto è che, come la rappresentazione sotto forma di quaternione, non mantiene l'informazione sul percorso della rotazione. Infatti è ancora più simile a una delta-rotazione (i.e. differenza di orientamento), rispetto ad un quaternione poiché copre una rotazione di soli 360\textdegree, rispetto ai 720\textdegree\ del quaternione. 
 
 \newpage
-\section{Forward Kinematics} \label{sectionFK}
+\section{Cinematica Diretta} \label{sectionFK}
 
 \begin{figure}
 \centering
@@ -105,7 +107,7 @@ L'unico difetto è che, come la rappresentazione sotto forma di quaternione, non
   \label{fig:FK3}
 \end{subfigure}
 \decoRule
-\caption[Forward Kinematic]{Esempio di posizionamento tramite Forward Kinematic. La figura rappresenta la stessa armatura, formata da diverse ossa, in tre posizioni differenti.}
+\caption[Cinematica Diretta]{Esempio di posizionamento tramite Forward Kinematic. La figura rappresenta la stessa armatura, formata da diverse ossa, in tre posizioni differenti.}
 \label{fig:FK}
 \end{figure}
 
@@ -116,22 +118,63 @@ Per definire una posa è quindi necessario specificare la rotazione di ogni osso
 
 Lo svantaggio è che questa metodologia rende difficile animare azioni comuni in cui gli arti si muovono in uno spazio non relativo al resto del corpo, ma rispetto allo spazio circostante. Ad esempio, per aprire una porta tenendo la mano sulla maniglia, il corpo si può spostare di lato, ma la mano deve rimanere aggrappata alla maniglia. Con una metodologia FK, l'animatore dovrebbe infatti spostare il corpo e, ogni volta, riposizionare la mano sulla maniglia, introducendo un sacco di \emph{counter-animation}, ovvero l'animazione inversa per riposizionare la mano nella posizione in cui era prima del movimento del resto del corpo.
 
-\section{Inverse Kinematics} \label{sectionIK}
-Definite la posizione della mano e della radice (spalla) la posizione delle ossa intermedie viene calcolata da un algoritmo (e.g. the Jacobian \cite{Parent:2012:CAA:2385444} e iTaSC \cite{blendWiki}).
+\section{Cinematica Inversa} \label{sectionIK}
 
-A volte non esiste nessuna soluzione (mano troppo lontana dalla spalla) e il risultato dev'essere approssimato.
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/2Dlinkage}
+\decoRule
+\caption[Inverse Kinematic 2D]{Esempio di segmento di scheletro formato da due ossa in uno spazio 2D. Quello evidenziato in azzurro è lo spazio raggiungibile dall'\emph{end-effector}}
+\label{fig:IK}
+\end{figure}
 
-Peggio è se esiste più di una soluzione (undercostrained problem, molto probabile). In tal caso il risultato è scelto dall'algoritmo da una delle possibili soluzioni. Non sempre però tutte sono realistiche o visivamente gradevoli.
+Il concetto di Inverse Kinematic è, fondamentalmente l'inverso di Forward Kinematic. In quest'ultimo ogni osso influenza la rotazione di quelli che lo seguono (i.e. figli).
+Al contrario, in IK, muovere un osso alla fine di una sequenza (i.e. \emph{end-effector}), influenza la posizione di quelli che lo precedono.
+Ciò è molto utile nel caso in cui si vogliano posizionare gli arti di una figura umana, in quanto rende il tutto più intuitivo.
+IK serve anche a fare in modo che una serie di ossa mantenga un estremo (i.e. \emph{end-effector}) connesso a qualcosa.
+Definite la posizione della mano e della radice (spalla) la posizione delle ossa intermedie viene calcolata automaticamente.
+Esistono diverse tecniche per il calcolo degli angoli delle articolazioni intermedie.
 
-È possibile aggiungere dei vincoli per limitare il numero di soluzioni possibili, molto utili quelli per l'imitare il movimento di un arto per renderlo più realistico.
-\section{Modularizzare l'animazione}
-\subsection{Cicli di animazione}
-Il miglior modo per modulare un animazione, ovvero spezzarla in più azioni ripetibili, è quello di individuare le animazioni più frequenti (e.g. camminata, corsa) e definirle una sola volta.
-Alcune animazioni, infatti, seguono dei pattern ben definiti.
-Grazie alla loro uniformità è possibile renderle cicliche in maniera tale da non dover rifare la stessa animazione più volte.
-\subsection{Shape keys}
-\subsection{Drivers}
-\subsection{Vincoli sulle azioni}
-uno dei vantaggi dei vincoli sulle azioni è che è possibile animare le ossa vincolate direttamente, senza aggiungere un osso padre.
+Nel caso di articolazioni relativamente semplici è possibile calcolare l'intero spazio delle soluzioni analiticamente, ed individuare tra esse quelle che soddisfano l'obiettivo.
+Ad esempio, nel caso di un sistema di due ossa ($O_1$ e $O_2$) e due articolazioni in uno spazio 2D come in Figura \ref{fig:IK} lo spazio raggiungibile dall'\emph{end-effector} può essere descritto come 
+\begin{equation*}
+    \{x: |O_1-O_2| \leq x \leq O_1+O_2\}
+\end{equation*}
+\newpage
+Data la posizione $(X,Y)$ obiettivo dell'\emph{end-effector}, se questa cade all'interno dello spazio raggiungibile, è possibile attraverso le formule trigonometriche, ricavare gli angoli delle 2 articolazioni:
+\begin{align}
+    \arccos{ (\theta _T) } &=  \frac{X}{\sqrt{X^2+Y^2}}\\
+    \theta_T &= \arccos{\left(  \frac{X}{\sqrt{X^2+Y^2}} \right)}\\
+    \cos{( \theta_1-\theta_T )} &=  \frac{O_1^2+X^2+Y^2-O_2^2}{2O_1\sqrt{X^2+Y^2}}\\
+    \theta_1 &= \arccos{\left(  \frac{O_1^2+X^2+Y^2-O_2^2}{2O_1\sqrt{X^2+Y^2}}\right)}+\theta_T\\
+    \cos{(180-\theta_2)} = -\cos{(\theta_2)} &= \frac{O_1^2+O_2^2-(X^2+Y^2)}{2O_1O_2}\\
+    \theta_2 &= \arccos{\left(\frac{O_1^2+O_2^2-X^2+Y^2}{2O_1O_2}\right)}
+\end{align}
 
-Solitamente utilizzate per controllare animazioni molto complesse, come la fuoriuscita del carrello di un aereo al momento dell'atterraggio, attraverso un solo controllo.
+Nell'equazioni sopra riportate $\theta_1$ e $\theta_2$ si riferiscono agli angoli rispetto alla posizione naturale dei rispettivi ossi. $\theta_T$ è l'angolo formato dall'ipotenusa immaginaria che si forma tracciando un segmento dalla radice alla posizione obiettivo dell'end-effector, rispetto alla posizione naturale di $O_1$.
+
+Per casi più complessi, come spesso capita nelle animazioni digitali, viene usato un metodo iterativo paragonabile alla risoluzione di un problema di ottimizzazioni in programmazione lineare.
+Ciò consiste nel ricalcolare gli angoli di tutte le articolazioni ad ogni passo dell'iterazione, fino ad arrivare alla posizione obiettivo.
+Per fare ciò viene usata una matrice di derivate parziali chiamata matrice Jacobiana \cite{Parent:2012:CAA:2385444} che ha la seguente struttura.
+
+\[J=
+\begin{bmatrix}
+    \dfrac{\partial p_x}{\partial \theta_1} & \dfrac{\partial p_x}{\partial \theta_2} & \dots & \dfrac{\partial p_x}{\partial \theta_n} \\[2ex]
+    \dfrac{\partial p_y}{\partial \theta_1} & \dfrac{\partial p_y}{\partial \theta_2} & \dots & \dfrac{\partial p_y}{\partial \theta_n} \\[2ex]
+    \dfrac{\partial p_z}{\partial \theta_1} & \dfrac{\partial p_z}{\partial \theta_2} & \dots & \dfrac{\partial p_z}{\partial \theta_n} \\[2ex]
+    \dfrac{\partial \alpha_x}{\partial \theta_1} & \dfrac{\partial \alpha_x}{\partial \theta_2} & \dots & \dfrac{\partial \alpha_x}{\partial \theta_n} \\[2ex]
+    \dfrac{\partial \alpha_y}{\partial \theta_1} & \dfrac{\partial \alpha_y}{\partial \theta_2} & \dots & \dfrac{\partial \alpha_y}{\partial \theta_n} \\[2ex]
+    \dfrac{\partial \alpha_z}{\partial \theta_1} & \dfrac{\partial \alpha_z}{\partial \theta_2} & \dots & \dfrac{\partial \alpha_z}{\partial \theta_n} 
+\end{bmatrix}
+\]
+
+Questa matrice è formata da tante colonne quante sono le articolazioni. Ciascun vettore colonna è poi costituito da 6 componenti, 3 ($x$, $y$ e $z$) per la posizione ($p$) e altre 3 per l'orientamento ($\alpha$).
+Blender propone anche un metodo alternativo per risolvere la cinematica inversa che tiene conto anche di altri vincoli definiti dall'utente \cite{blendDoc}. Questo metodo si chiama iTaSC e, come il metodo standard, utilizza una matrice Jacobiana, ma il modo in cui la calcola è diverso \cite{blendWiki}.
+
+Un motivo per cui il metodo iterativo è migliore di quello analitico, oltre ad essere l'unico metodo per risolvere articolazioni complesse, è che, nel caso in cui la posizione obiettivo si trovi al di fuori dello spazio raggiungibile, (e.g. la mano deve raggiungere un punto troppo distante dalla spalla) non esiste nessuna soluzione e in questo caso il risultato può e dev'essere approssimato.
+
+Siccome quello della cinematica inversa è un problema sotto-vincolato, è molto probabile che esista più di una soluzione. Nel caso visto in Figura \ref{fig:IK} ad esempio esistono 2 soluzioni, per un qualsiasi punto $(X,Y)$ interno allo spazio raggiungibile, simmetriche rispetto alla linea immaginaria che collega la radice di $O_1$ alla punta di $O_2$.
+In tal caso il risultato è scelto dall'algoritmo tra una delle possibili soluzioni. Non sempre però, sono tutte realistiche o visivamente gradevoli.
+Per questo motivo è possibile aggiungere dei vincoli per limitare il numero di soluzioni possibili, molto utili sono quelli per l'imitare il movimento di un arto, per renderlo più realistico.
+
+

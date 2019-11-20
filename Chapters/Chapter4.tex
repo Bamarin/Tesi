@@ -14,9 +14,9 @@ Quest'ultimo aspetto è indispensabile soprattutto nel caso in cui ci siano più
 
 \section{Progettazione generale}
 
+%finish your film "Design"
+
 Production oriented
-
-
 
 create object once, link in many scene instead of copying it.
 
@@ -27,28 +27,95 @@ Armatures allows to animate objects even if they are linked :D
 Quando si tratta di sviluppare qualcosa di complesso come una figura umana, è opportuno progettarla, per trovare un modello di astrazione che la semplifichi, pur mantenendo le proprietà che ci interessano e quindi ci permetta di animarla in maniera efficiente.
 Il corpo umano è infatti composto da circa duecento DOF \cite{Parent:2012:CAA:2385444}.
 Nonostante ciò, la struttura esteriore è fondamentalmente composta da un'unica mesh.
-Quindi, rispetto a quanto visto fin'ora, dove la struttura da animare era un'armatura composta da più ossa, sarà necessario deformare la mesh per adattarla all'armatura sottostante.
+Quindi, rispetto a quanto visto fin'ora, dove la struttura da animare era un'armatura composta da più ossa, sarà necessario deformare la mesh per adattarla all'armatura sottostante. Ciò è possibile associando determinati vertici della mesh ad ogni osso.
 
-Per fare ciò sarà necessario 
+La progettazione del rig (Figura \ref{fig:rig}) serve ad ottenere una serie di controlli interattivi mirati a facilitare l'animazione del personaggio.
+L'usabilità di un rig è un aspetto fondamentale, in quanto, se il rig non è semplice da utilizzare per un animatore, esso è completamente inutile.
+Il rig, infatti, non è fine a se stesso, ma è lo strumento che permettera (solitamente ad altri) di animare i nostri modelli.
+La progettazione delle animazione consiste dunque nell'ideare un rig che ci permetterà poi di animare i medelli efficientemente. Parlare di progettazione di animazioni o di rig è quindi indifferente.
+Per progettare un buon rig serve, prima di tutto, individuarne l'obiettivo, per rendere il rig il più semplice possibile.
+Di seguito sono riportati alcuni degli obiettivi individuati e per le dverse parti di un rig.
 
-definire un \emph{rig}, fondamentalmente 
+\subsection{Arti superiori}
 
-strumento che verrà utilizzato da altri
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/arm}
+\decoRule
+\caption[Rig braccio]{Esempio di un semplice rig per il braccio.}
+\label{fig:arm}
+\end{figure}
 
-usabilità
+Le braccia devono essere in grado di estendersi per raggiungere e afferrare oggetti.
+Come spiegato in precedenza (Capitolo \ref{Chapter3}), ha senso fare utilizzo dell'IK per posizionare la mano dove si vuole, e lasciare che il resto del braccio venga posizionato di conseguenza.
+In tal caso è opportuno identificare quante articolazioni sono necessarie nel braccio e quanti DOF servono in ciascuna di esse.
+Un buon modo di rappresentare gli arti superiori è quello di utilizzare 7 DOF: 3 per la spalla e il polso, 1 per il gomito (vedi Figura \ref{fig:arm}).
 
-importanza di un rig semplice ed efficace per rendere facile il lavoro dell'animatore
-se non è semplice da utilizzare per un animatore è inutile.
+Un altro modo è quello di aggiungere un articolazione a metà dell'avambraccio per permettere la rotazione longitudinale di esso.
+In altri casi l'avambraccio è staccato dal braccio, questo permette di evitare di dover deformare la mesh, ma il taglio netto tra avambraccio e braccio non sempre è conveniente in termini di visualizzazione.
+Per tutte le figure umane nel nostro progetto è stata utilizzata la prima rappresentazione (Figura \ref{fig:arm}).
+Nel corto, appaiono anche dei robot, per i quali sarebbe potuto essere utilizzata la terza rappresentazione, più semplice.
+È stato tuttavia scelto di utilizzare comunque la prima per permettere di avere lo stesso scheletro per tutti i personaggi, in modo da avere un rig uniforme e non dover fare del lavoro doppio.
 
-capire cosa serve (obiettivo) per rendere il rig il più semplice possibile
+Un'ultima considerazione da fare è che ci sono alcuni casi in cui è preferibile poter animare il braccio attraverso FK.
+Per questo motivo è stato scelto di utilizzare un rig che permetta di alternare tra FK e IK.
+Nel caso della FK è inoltre opportuno rendere la rotazione del braccio indipendente da quella del corpo.
+Questa caratteristica è quasi sempre indispensabile, se si pensa ad esempio al ritardo del movimento delle braccia, quando quando le si lascia andare (a peso morto), rispetto a quello del busto, facendolo ruotare a destra e sinistra.
+Esistono  però dei casi in cui è preferibile che le braccia mantengano la rotazione del busto, ad esempio nel caso di un robot.
+Siccome lo stesso rig verrà utilizzato sia per umani che robot, ha senso far si che questa caratteristica sia attivabile e disattivabile a seconda di chi stia implementando il rig.
+\newline
 
-Trade-off, controllo VS velocità e semplicità d'uso
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/hand}
+\decoRule
+\caption[Rig mano]{Esempio di un semplice rig per la mano}
+\label{fig:hand}
+\end{figure}
 
-scelta della giusta rappresentazione di rotazione (\ref{Section3.1}) basata sul numero di DOF per la giuntura
+Per quanto riguarda il rig della mano un modello molto utilizzato è quello rappresentato in Figura \ref{fig:hand}.
+In alcuni casi un osso aggiuntivo è presente per ogni dito, tra la falange e il polso, per permettere un maggiore controllo e livello di dettaglio.
+Nel nostro caso, non abbiamo ritenuto questa scelta necessaria, preferendo un rig più semplice e più veloce da animare. 
+Un modo più semplice invece, soprattutto usato in videogiochi che utilizzano il minor numero possibile di poligoni, è quello di raggruppare alcune dita.
+È molto importante scegliere il giusto bilancio tra livello di controllo e semplicità d'uso, questo trade-off infatti non permette di massimizzare entrambe le caratteristiche.
+Siccome per le dita non è necessario avere un IK, non sono necessarie ulteriori progettazioni. Verrà semplicemente usato l'FK per il resto della mano.
 
-nel caso di rotazione euleriana (max 2 DOF) scegliere l'ordine degl'assi basandosi su quali verrà effettuata la rotazione:
-- più usato -> esterno,world/parent aligned (terzo)
-- secondo più usato -> interno local aligned (primo)
-- meno usato/non usato -> secondo (causa gimbal lock)
+Ora che le articolazioni sono state individuate e per ciascuna di esse sappiamo quanti DOF serviranno, possiamo procedere con la scelta della giusta rappresentazione di rotazione (\ref{Section3.1} Rappresentazioni di rotazione).
+Basandoci su quanto visto nel Capitolo \ref{Chapter3}, possiamo dedurre che per le articolazioni con 3 DOF andranno utilizzati dei quaternioni. Mentre per le altre possiamo usare gli angoli di Eulero.
 
-Animazione straight ahead vs pose-to-pose (mixing between the 2)
+Nel caso di rotazione euleriana è anche necessario scegliere l'ordine degli assi, in base a quelli sui quali verrà effettuata la rotazione:
+\begin{itemize}
+    \item più usato -> anello (Figura \ref{fig:euler}) esterno, allineato globalmente/osso genitore;
+    \item secondo più usato -> anello interno, rotazione locale;
+    \item meno usato/non usato -> secondo, causa gimbal lock;
+\end{itemize}
+
+\subsection{Arti inferiori}
+
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/leg}
+\decoRule
+\caption[Rig gamba]{Esempio di un semplice rig per la gamba}
+\label{fig:leg}
+\end{figure}
+
+Per progettare il rig delle gambe in maniera che sia efficacie, bisogna pensare a qual è il modo più conveniente di animare una camminata.
+
+Ad un certo punto il piede poggia a terra e deve rimanere fisso in quella posizione. Il corpo, invece, continua a spostarsi in avanti.
+Se usassimo la cinematica diretta, ogni volta che il corpo viene spostato in avanti, dovremmo riposizionare il piede nella posizione in cui era (i.e. counter-animation), in quanto quest'ultimo è discendente del corpo.
+In alternativa potremmo rimodellare l'intera gerarchia per far si che il piede si trovi più in alto nella gerarchia rispetto al corpo. Ma questo sarebbe una pessima scelta per ovvi motivi.
+Come nell'esempio della mano sulla maniglia, anche qui serve utilizzare una IK, per muovere il resto del corpo indipendentemente dal piede.
+Le gambe possono quindi essere controllate interamente attraverso la cinematica inversa (Sezione \ref{sectionIK}).
+Siccome questo metodo è sotto-vincolato (i.e. esistono più soluzioni), resta da specificare un vincolo aggiuntivo, relativo all'articolazione intermedia (il ginocchio).
+
+Per fare ciò, è possibile aggiungere un osso, figlio del piede, che servirà per direzionare il ginocchio.
+In blender questo osso viene chiamato \emph{Pole Target} \cite{blendDoc}, ed il suo funzionamento è molto semplice: tracciando una linea immaginaria dalla base della gamba all'end-effector, viene individuato l'asse che collega i due poli della sequenza delle ossa che costituisce la cinematica inversa.
+In Figura \ref{fig:leg} questo asse è rappresentato da una linea tratteggiata gialla.
+Ruotando l'intera sequenza di ossa intorno a questo asse, si ottengono infinite soluzioni ammissibili, in cui l'articolazione del ginocchio è l'unica a cambiare posizione, descrivendo una sorta di "equatore" intorno all'asse.
+Ora, tracciando un'altra linea, che collega la base del \emph{pole target} all'asse precedentemente menzionato, e perpendicolare a quest'ultimo, avremo un modo di rappresentare la posizione esatta del ginocchio, attraverso l'angolo formato da quest'ultima linea rispetto alla posizione originale.
+Si noti che la seconda linea rimane sempre perpendicolare all'asse. Quindi una traslazione del \emph{pole target} parallela all'asse, non ha effetto sulla rotazione della gamba.
+
+In fine, come è stato fatto per il gomito, possiamo forzare il ginocchio a piegarsi su un singolo asse, garantendo un movimento ancora più realistico in fase di animazione.
+
+
