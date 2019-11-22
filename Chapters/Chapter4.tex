@@ -85,13 +85,13 @@ Siccome lo stesso rig verrà utilizzato sia per umani che robot, ha senso far si
 \newpage
 Per quanto riguarda il rig della mano un modello molto utilizzato è quello rappresentato in Figura \ref{fig:hand}.
 In alcuni casi un osso aggiuntivo è presente per ogni dito, tra la falange e il polso, per permettere un maggiore controllo e livello di dettaglio.
-Nel nostro caso, non abbiamo ritenuto questa scelta necessaria, preferendo un rig più semplice e più veloce da animare. 
+Nel nostro caso, questa scelta non è stata ritenuta necessaria, preferendo un rig più semplice e più veloce da animare. 
 Un modo più semplice invece, soprattutto usato in videogiochi che utilizzano il minor numero possibile di poligoni, è quello di raggruppare alcune dita.
 È molto importante scegliere il giusto bilancio tra livello di controllo e semplicità d'uso, questo trade-off infatti non permette di massimizzare entrambe le caratteristiche.
 Siccome per le dita non è necessario avere un IK, non sono necessarie ulteriori progettazioni. Verrà semplicemente usato l'FK per il resto della mano.
 
-Ora che le articolazioni sono state individuate e per ciascuna di esse sappiamo quanti DOF serviranno, possiamo procedere con la scelta della giusta rappresentazione di rotazione (\ref{Section3.1} Rappresentazioni di rotazione).
-Basandoci su quanto visto nel Capitolo \ref{Chapter3}, possiamo dedurre che per le articolazioni con 3 DOF andranno utilizzati dei quaternioni. Mentre per le altre possiamo usare gli angoli di Eulero.
+Ora che le articolazioni sono state individuate e, per ciascuna di esse, si sa quanti DOF serviranno, è possibile procedere con la scelta della giusta rappresentazione di rotazione (\ref{Section3.1} Rappresentazioni di rotazione).
+Basandoci su quanto visto nel Capitolo \ref{Chapter3}, si può dedurre che per le articolazioni con 3 DOF andranno utilizzati dei quaternioni. Mentre per le altre è possibile usare gli angoli di Eulero.
 
 Nel caso di rotazione euleriana è anche necessario scegliere l'ordine degli assi, in base a quelli sui quali verrà effettuata la rotazione:
 \begin{itemize}
@@ -129,6 +129,6 @@ Ruotando l'intera sequenza di ossa intorno a questo asse, si ottengono infinite 
 Ora, tracciando un'altra linea, che collega la base del \emph{pole target} all'asse precedentemente menzionato, e perpendicolare a quest'ultimo, avremo un modo di rappresentare la posizione esatta del ginocchio, attraverso l'angolo formato da quest'ultima linea rispetto alla posizione originale.
 Si noti che la seconda linea rimane sempre perpendicolare all'asse. Quindi una traslazione del \emph{pole target} parallela all'asse, non ha effetto sulla rotazione della gamba.
 
-In fine, come è stato fatto per il gomito, possiamo forzare il ginocchio a piegarsi su un singolo asse, garantendo un movimento ancora più realistico in fase di animazione.
+In fine, come è stato fatto per il gomito, si può forzare il ginocchio a piegarsi su un singolo asse, garantendo un movimento ancora più realistico in fase di animazione.
 
 

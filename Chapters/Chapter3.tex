@@ -75,7 +75,7 @@ L'interpolazione risulta diretta e dolce, infatti il movimento non è spezzato s
 
 Per rendere tutto ciò possibile servono 4 componenti (X, Y, Z, W), come già detto in precedenza, uno per la posizione originale più una per la rotazione su ogni asse. Se si prende il caso di rotazioni su due assi si può immaginare che queste 3 componenti siano 3 punti su una sfera, come mostrato in Figura \ref{fig:quater}. Ogni altra rotazione è data dall'interpolazione di questi tre punti.
 
-La ragione per cui i due punti sulla sfera rappresentano una rotazione di 180\textdegree\ anziché 90\textdegree\ e resa necessaria siccome altrimenti questi due punti coinciderebbero nel punto più basso della sfera. Come effetto aggiuntivo possiamo rappresentare rotazioni fino a 720\textdegree\ ed ogni orientamento equivale a due possibili rotazioni dando all'animatora l'abilità di decidere in che verso ruotare l'oggetto durante un'animazione. 
+La ragione per cui i due punti sulla sfera rappresentano una rotazione di 180\textdegree\ anziché 90\textdegree\ e resa necessaria siccome altrimenti questi due punti coinciderebbero nel punto più basso della sfera. Come effetto aggiuntivo è possibile rappresentare rotazioni fino a 720\textdegree\ ed ogni orientamento equivale a due possibili rotazioni dando all'animatora l'abilità di decidere in che verso ruotare l'oggetto durante un'animazione. 
 
 \subsection{Matriciale}
 Quest'ultima è probabilmente la rappresentazione più ottimale in termini di flessibilità, in quanto permette di rappresentare anche traslazioni, scalature e altre trasformazioni come \emph{shear}. È, infatti, la rappresentazione che blender utilizza internamente \cite{blendApi} \cite{nat2012rig} proprio perché offre la maggior flessibilità.
@@ -153,7 +153,7 @@ Data la posizione $(X,Y)$ obiettivo dell'\emph{end-effector}, se questa cade all
 
 Nell'equazioni sopra riportate $\theta_1$ e $\theta_2$ si riferiscono agli angoli rispetto alla posizione naturale dei rispettivi ossi. $\theta_T$ è l'angolo formato dall'ipotenusa immaginaria che si forma tracciando un segmento dalla radice alla posizione obiettivo dell'end-effector, rispetto alla posizione naturale di $O_1$.
 
-Per casi più complessi, come spesso capita nelle animazioni digitali, viene usato un metodo iterativo paragonabile alla risoluzione di un problema di ottimizzazioni in programmazione lineare.
+Per casi più complessi, come spesso capita nelle animazioni digitali, viene usato un metodo iterativo  analogo alla risoluzione di un problema di ottimizzazione in programmazione lineare \cite{lp2017}.
 Ciò consiste nel ricalcolare gli angoli di tutte le articolazioni ad ogni passo dell'iterazione, fino ad arrivare alla posizione obiettivo.
 Per fare ciò viene usata una matrice di derivate parziali chiamata matrice Jacobiana \cite{Parent:2012:CAA:2385444} che ha la seguente struttura.
 
@@ -169,6 +169,8 @@ Per fare ciò viene usata una matrice di derivate parziali chiamata matrice Jaco
 \]
 
 Questa matrice è formata da tante colonne quante sono le articolazioni. Ciascun vettore colonna è poi costituito da 6 componenti, 3 ($x$, $y$ e $z$) per la posizione ($p$) e altre 3 per l'orientamento ($\alpha$).
+La funzione obiettivo è data da...
+
 Blender propone anche un metodo alternativo per risolvere la cinematica inversa che tiene conto anche di altri vincoli definiti dall'utente \cite{blendDoc}. Questo metodo si chiama iTaSC e, come il metodo standard, utilizza una matrice Jacobiana, ma il modo in cui la calcola è diverso \cite{blendWiki}.
 
 Un motivo per cui il metodo iterativo è migliore di quello analitico, oltre ad essere l'unico metodo per risolvere articolazioni complesse, è che, nel caso in cui la posizione obiettivo si trovi al di fuori dello spazio raggiungibile, (e.g. la mano deve raggiungere un punto troppo distante dalla spalla) non esiste nessuna soluzione e in questo caso il risultato può e dev'essere approssimato.
