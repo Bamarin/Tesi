@@ -36,13 +36,13 @@ Questa rappresentazione, è ottima per rotazioni di articolazioni con un solo \e
   \includegraphics[width=.9\linewidth]{Figures/euler-2.jpg}
   \caption{Gimbal lock, l'asse X e Z sono allineati.}
   \label{fig:eulerB}
-\end{subfigure}
-\decoRule
-\caption[Rotazione Euleriana]{Rappresentazione di rotazione Euleriana attraverso un giroscopio a tre assi.}
-  \begin{minipage}{.8\textwidth}
+\end{subfigure}\\[2ex]
+  \begin{minipage}{\textwidth}
   \footnotesize
   \emph{(Immagini di Nathan Vegdahl)}
   \end{minipage}
+\decoRule
+\caption[Rotazione Euleriana]{Rappresentazione di rotazione Euleriana attraverso un giroscopio a tre assi.}
 \label{fig:euler}
 \end{figure}
 
@@ -169,7 +169,18 @@ Per fare ciò viene usata una matrice di derivate parziali chiamata matrice Jaco
 \]
 
 Questa matrice è formata da tante colonne quante sono le articolazioni. Ciascun vettore colonna è poi costituito da 6 componenti, 3 ($x$, $y$ e $z$) per la posizione ($p$) e altre 3 per l'orientamento ($\alpha$).
-La funzione obiettivo è data da...
+La funzione obiettivo è data dalle variabili che compongono la posizione e l'orientamento dell'end-effector.
+Ad ogni iterazione si cerca di minimizzare la distanza tra la posizione e orientamento corrente del end-effector, rispetto allo stato ottimo che si vuole raggiungere.
+Per fare ciò esistono diversi metodi \cite{simplex2011, simplex2006} \cite{mingozR2019} \cite{mingozD2019}, tutti comunque utilizzano la matrice Jacobiana.
+Il risultato è un vettore della forma
+
+\[V=
+\begin{bmatrix}
+v_x & v_y & v_z & \omega_x & \omega_y & \omega_z
+\end{bmatrix}
+^T\]    
+
+dove $v$ e $\omega$ sono due vettori in uno spazio 3D, il primo lineare e indica lo spostamento, il secondo rotazionale indica la rotazione.
 
 Blender propone anche un metodo alternativo per risolvere la cinematica inversa che tiene conto anche di altri vincoli definiti dall'utente \cite{blendDoc}. Questo metodo si chiama iTaSC e, come il metodo standard, utilizza una matrice Jacobiana, ma il modo in cui la calcola è diverso \cite{blendWiki}.
 
