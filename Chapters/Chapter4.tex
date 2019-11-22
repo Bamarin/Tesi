@@ -15,12 +15,21 @@ Quest'ultimo aspetto è indispensabile soprattutto nel caso in cui ci siano più
 \section{Progettazione generale}
 
 %finish your film "Design"
+Normalmente la fase di progettazione di un cortometraggio serve a definire l'aspetto dei personaggi e dell'ambientazione (i.e. Character Design, Environment/Prop Design).
+Tuttavia questi aspetti sono stati prevalentemente coperti da A. Uras, in quanto il corto rappresenta una storia di sua creazione, e non verranno trattati. La progettazione delle animazioni verrà invece trattata dettagliatamente, in quanto oggetto principale del mio lavoro.
 
-Production oriented
+A questo punto del progetto era chiaro che l'obiettivo finale era quello di realizzare un breve trailer di una possibile serie piuttosto che un cortometraggio.
+Si è quindi proceduti a selezionare le scene da realizzare per stare entro i due minuti di tempo di riproduzione.
 
-create object once, link in many scene instead of copying it.
+Fatto ciò ho proceduto col creare un flusso di lavoro, in maniera tale da procedere in modo organizzato.
+Siccome non ero il solo a lavorare a questo progetto ho scelto un approccio orientato alla produzione, ovvero in cui diversi team si occupano di diversi aspetti del progetto ma che, ciò non di meno, sono collegati e dipendono gli uni dagli altri.
 
-Armatures allows to animate objects even if they are linked :D
+Ad esempio, una volta realizzato il rig base per un modello dev'essere possibile animarlo direttamente, anche senza avere il rig avanzato finale. Ancora più importante è che sia possibile aggiungere dettagli ad un modello, come materiali e textures, anche dopo che questo è stato animato.
+Per fare ciò, ho seguito una semplice filosofia: creare l'oggetto una volta e linkarlo in diverse scene invece che copiarlo.
+Questa procedura è analoga a quella di utilizzare delle interfacce nella programmazione ad oggetti invece che le classi direttamente. In questo modo, è possibile modificare una classe in un secondo tempo senza alterarne il suo comportamento e, di conseguenza, chi la utilizza non nota alcuna differenza.
+
+Ciò è stato possibile anche grazie alla caratteristica delle armature (o scheletro), di poter essere animate anche quando linkate da un altro file.
+In pratica, è possibile definire un proxy che permette di accedere a tutte le proprietà di un'armatura come se questa fosse l'oggetto originale e non una copia (o meglio un link).
 
 \section{Progettazione delle animazioni}
 
@@ -36,6 +45,7 @@ La progettazione delle animazione consiste dunque nell'ideare un rig che ci perm
 Per progettare un buon rig serve, prima di tutto, individuarne l'obiettivo, per rendere il rig il più semplice possibile.
 Di seguito sono riportati alcuni degli obiettivi individuati e per le dverse parti di un rig.
 
+\newpage
 \subsection{Arti superiori}
 
 \begin{figure}
@@ -63,7 +73,6 @@ Nel caso della FK è inoltre opportuno rendere la rotazione del braccio indipend
 Questa caratteristica è quasi sempre indispensabile, se si pensa ad esempio al ritardo del movimento delle braccia, quando quando le si lascia andare (a peso morto), rispetto a quello del busto, facendolo ruotare a destra e sinistra.
 Esistono  però dei casi in cui è preferibile che le braccia mantengano la rotazione del busto, ad esempio nel caso di un robot.
 Siccome lo stesso rig verrà utilizzato sia per umani che robot, ha senso far si che questa caratteristica sia attivabile e disattivabile a seconda di chi stia implementando il rig.
-\newline
 
 \begin{figure}
 \centering
@@ -73,6 +82,7 @@ Siccome lo stesso rig verrà utilizzato sia per umani che robot, ha senso far si
 \label{fig:hand}
 \end{figure}
 
+\newpage
 Per quanto riguarda il rig della mano un modello molto utilizzato è quello rappresentato in Figura \ref{fig:hand}.
 In alcuni casi un osso aggiuntivo è presente per ogni dito, tra la falange e il polso, per permettere un maggiore controllo e livello di dettaglio.
 Nel nostro caso, non abbiamo ritenuto questa scelta necessaria, preferendo un rig più semplice e più veloce da animare. 
@@ -110,7 +120,8 @@ Le gambe possono quindi essere controllate interamente attraverso la cinematica 
 Siccome questo metodo è sotto-vincolato (i.e. esistono più soluzioni), resta da specificare un vincolo aggiuntivo, relativo all'articolazione intermedia (il ginocchio).
 
 Per fare ciò, è possibile aggiungere un osso, figlio del piede, che servirà per direzionare il ginocchio.
-Il motivo per cui, quest'ultimo osso, viene solitamente definito come figlio del piede, è per il semplice motivo che piede e ginocchio puntano solitamente nella stessa direzione. In questo modo il ginocchio eredita la rotazione del piede, semplificando ulteriormente il lavoro dellàanimatore.
+Il motivo per cui, quest'ultimo osso, viene solitamente definito come figlio del piede, è per il semplice motivo che piede e ginocchio puntano solitamente nella stessa direzione.
+In questo modo il ginocchio eredita la rotazione del piede, semplificando ulteriormente il lavoro dell'animatore.
 
 In blender questo osso viene chiamato \emph{Pole Target} \cite{blendDoc}, ed il suo funzionamento è molto semplice: tracciando una linea immaginaria dalla base della gamba all'end-effector, viene individuato l'asse che collega i due poli della sequenza delle ossa che costituisce la cinematica inversa.
 In Figura \ref{fig:leg} questo asse è rappresentato da una linea tratteggiata gialla.
