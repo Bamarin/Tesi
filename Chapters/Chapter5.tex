@@ -180,7 +180,25 @@ Consiste nell'assegnare relazioni tra oggetti \parencite{BlendTut}.
 
 menzionare rigify
 
-Animazione straight ahead vs pose-to-pose (mixing between the 2)
+Esistono principalmente due metodi di animazione \cite{Williams:2009:ASK:1823185}:
+\begin{itemize}
+    \item dall'inizio alla fine
+    \item da posizione a posizione
+\end{itemize}
+Il primo è molto semplice: si parte dal primo frame, dove si posizionano all'interno della scena tutti i personaggi e la telecamera. Poi si passa al secondo animando ogni cosa, poi al terzo e così via. 
+Questo metodo è molto utilizzato nell'animazione tradizionale, soprattutto nella realizzazione dei flip-book.
+Ha il vantaggio di essere naturale: per arrivare in una determinata posizione devo spostarmi facendo un passo alla volta partendo dal primo punto in avanti.
+Di conseguenza anche le animazione che ne risultano hanno un aspetto più naturale.
+Questo metodo però rende difficile pianificare le azioni future per questo motivo non è ottimale.
+
+Al contrario, animare da posizione a posizione permette di pianificare un'intera scena definendo delle posizioni chiave.
+Queste ultime, anche dette \emph{key-frame}, provengono direttamente dallo storyboard e definiscono cosa deve accadere in una scena.
+Definite queste posizioni principali, distribuite nella sequenza dei frame della scena, si possono aggiungere i frame di intermezzo tra due posizioni.
+Nell'animazione digitale questo metodo è il più efficiente in quanto i frame di intermezzo possono venire automaticamente calcolati come interpolazione delle due posizioni.
+Il lato negativo è che le animazioni risultanti non sono molto naturali: spesso è necessario rendere un personaggio più veloce o più lento, per farlo arrivare in un ponto al tempo giusto e rispettare i piani preposti.
+
+Per realizzare le animazioni di questo cortometraggio è stato fatto ovviamente uso di quest'ultimo metodo.
+Va aggiunto però che, per rendere le animazioni più naturali, dopo aver definito tutti i frame di intermezzo. Questi ultimi sono stati modificati con un approccio dal primo verso l'ultimo. In questo modo l'azione è più naturale, e spezza la linearità dell'interpolazione che, essendo calcolata dal computer, non mostra mai un movimento realistico fin da subito. È quindi più giusto dire che nella realizzazione del trailer, è stato fatto uso di una combinazione delle due tecniche.
 
 dialoghi
 menzionare Rhubarb
@@ -188,7 +206,7 @@ menzionare Rhubarb
 divisione dx/sx
 
 \subsection{Cicli di animazione}
-Il miglior modo per modulare un animazione, ovvero spezzarla in più azioni ripetibili, è quello di individuare le animazioni più frequenti (e.g. camminata, corsa) e definirle una sola volta.
+Il miglior modo per modularizzare un animazione, ovvero spezzarla in più azioni ripetibili, è quello di individuare le animazioni più frequenti (e.g. camminata, corsa) e definirle una sola volta.
 Alcune animazioni, infatti, seguono dei pattern ben definiti.
 Grazie alla loro uniformità è possibile renderle cicliche in maniera tale da non dover rifare la stessa animazione più volte.
 \subsection{Shape keys}
