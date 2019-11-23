@@ -9,6 +9,54 @@
 %----------------------------------------------------------------------------------------
 
 \section{Modellazione}
+
+Con modellazione digitale, o modellazione 3D, o semplicemente modellazione, per brevità, si intende la manipolazione di veritci in uno spazio tridimensionale per realizzare solidi più o meno complessi denominati modelli.
+Questa è senz'altro la fare più artistica dell'intero processo di produzione, e una di quelle che più mi ha appassionato.
+
+Una volta definiti i concept art, in gran parte realizzati da A. Uras, il primo passo della produzione è appunto quello di realizzare i modelli dei personaggi, dei prop e delle ambientazioni.
+Per fare ciò, mi sono avvalso di diverse tecniche di modellazione 3D, che possono essere divise nelle seguenti 2 categorie:
+\begin{itemize}
+    \item Modellazione hard-surface \cite{hardSurf}.
+    \item Scultura digitale\cite{3Dsculpt}.
+\end{itemize}
+La differenza fondamentale sta nel cosa si vuole realizzare. La prima è ottima per quasi tutto ciò che è realizzato dall'uomo (e.g. macchinari, edifici) ed è stata quindi stata usata nella realizzazione di ambientazioni e prop.
+Consiste nel partire da una forma geometrica semplice, ad esempio un cubo o una sfera, ed aggiungere dettagli estrudendo sezioni o utilizzato operatori booleani in combinazione con altre forme geometriche. (Figura \ref{fig:box-model})
+Il risultato è un modello dagli spigoli ben definiti, che comunque può avere superfici curve e smussate.
+La caratteristica che lo distingue è la simmetria della struttura e la precisione della posizione dei dettagli. 
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.99\linewidth]{Figures/box1.png}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.99\linewidth]{Figures/box2.png}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.99\linewidth]{Figures/box3.png}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.99\linewidth]{Figures/box4.png}
+\end{subfigure}\\[2ex]
+\decoRule
+\caption[Modellazione hard-surface]{Esempio di modellazione hard-surface per modellare un'astronave.}
+\label{fig:box-model}
+\end{figure}
+
+Al contrario, il secondo metodo viene utilizzato per ottenere modelli organici, in pratica tutto ciò che è presente in natura.
+Questi modelli sono particolari, poiché andranno deformati per essere animati.
+Un esempio lampante, in questo progetto, sono i personaggi.
+Nonostante anche in questo caso la simmetria sia fondamentale (ogni personaggio ha 2 braccia e due gambe perfettamente simmetriche), vengono solitamente aggiunti dettagli per rompere la simmetria, siccome in natura nulla è perfettamente simmetrico.
+Anche in questo caso si parte solitamente da delle forme geometriche semplici, tuttavia il processo di modellazione è completamente differente, tant'è che spesso si fa distinzione tra modellazione e scultura digitale (come se i due concetti si escludessero a vicenda).
+Nella scultura digitale infatti non si usano mai operazioni come l'estrusione di una faccia, di fatto il concetto di faccia non viene neanche utilizzato.
+La mesh viene vista come un oggetto compatto, i cui vertici possono essere manipolati attraverso strumenti che emulano le azioni di uno scultore.
+Per questo motivo la scultura digitale è anche il metodo di modellazione preferito dagli artisti.
+\newline
+
 \begin{figure}
 \centering
 \includegraphics[width=.8\textwidth]{Figures/bandit-concept}
@@ -23,31 +71,6 @@
 \caption[Modello 3D]{Rappresentazione 3D del concept art mostrato in Figura \ref{fig:concept}}
 \label{fig:model}
 \end{figure}
-
-Con modellazione digitale, o modellazione 3D, o semplicemente modellazione, per brevità, si intende la manipolazione di veritci in uno spazio tridimensionale per realizzare solidi più o meno complessi denominati modelli.
-Questa è senz'altro la fare più artistica dell'intero processo di produzione, e una di quelle che più mi ha appassionato.
-
-Una volta definiti i concept art, in gran parte realizzati da A. Uras, il primo passo della produzione è appunto quello di realizzare i modelli dei personaggi, dei prop e delle ambientazioni.
-Per fare ciò, mi sono avvalso di diverse tecniche di modellazione 3D, che possono essere divise nelle seguenti 2 categorie:
-\begin{itemize}
-    \item Modellazione hard-surface \cite{hardSurf}.
-    \item Scultura digitale\cite{3Dsculpt}.
-\end{itemize}
-La differenza fondamentale sta nel cosa si vuole realizzare. La prima è ottima per quasi tutto ciò che è realizzato dall'uomo (e.g. macchinari, edifici) ed è stata quindi stata usata nella realizzazione di ambientazioni e prop.
-Consiste nel partire da una forma geometrica semplice, ad esempio un cubo o una sfera, ed aggiungere dettagli estrudendo sezioni o utilizzato operatori booleani in combinazione con altre forme geometriche.
-Il risultato è un modello dagli spigoli ben definiti, che comunque può avere superfici curve e smussate.
-La caratteristica che lo distingue è la simmetria della struttura e la precisione della posizione dei dettagli. 
-
-Al contrario, il secondo metodo viene utilizzato per ottenere modelli organici, in pratica tutto ciò che è presente in natura.
-Questi modelli sono particolari, poiché andranno deformati per essere animati.
-Un esempio lampante, in questo progetto, sono i personaggi.
-Nonostante anche in questo caso la simmetria sia fondamentale (ogni personaggio ha 2 braccia e due gambe perfettamente simmetriche), vengono solitamente aggiunti dettagli per rompere la simmetria, siccome in natura nulla è perfettamente simmetrico.
-Anche in questo caso si parte solitamente da delle forme geometriche semplici, tuttavia il processo di modellazione è completamente differente, tant'è che spesso si fa distinzione tra modellazione e scultura digitale (come se i due concetti si escludessero a vicenda).
-Nella scultura digitale infatti non si usano mai operazioni come l'estrusione di una faccia, di fatto il concetto di faccia non viene neanche utilizzato.
-La mesh viene vista come un oggetto compatto, i cui vertici possono essere manipolati attraverso strumenti che emulano le azioni di uno scultore.
-Per questo motivo la scultura digitale è anche il metodo di modellazione preferito dagli artisti.
-\newline
-
 Affinché un modello si possa definire ben fatto e ultimato, è necessario soddisfare i seguenti criteri.
 In primo luogo, deve ben rappresentare in 3D quello che il concept si limitava a mostrare in 2D.
 In Figura \ref{fig:concept} e \ref{fig:model} è possibile notare quanto il modello 3D si avvicini al concept originale.
@@ -86,6 +109,36 @@ Avere due modelli separati, ci permette di utilizzare il primo nelle animazioni 
 
 Qui i vantaggi sono molteplici: è possibile iniziare ad animare un modello subito, parallelizzando la fase di animazione a quella di modellazione dei dettagli.
 In più come già detto, si avrà un frame-rate più alto in fase di animazione, ed un rendering più veloce una volta ultimate le animazioni.
+
+In Figura \ref{fig:boy} \ref{fig:cap} \ref{fig:lt} e \ref{fig:prop} sono riportati altri esempi di comparazione tra concept e modello 3D dei modelli da me realizzati. Tutti i concept, a parte quello del tenente, sono stati forniti da Alberto Uras. 
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/boy}
+\decoRule
+\caption[Ragazzo]{Modello 3D del volto del ragazzo a confronto con il relativo concept.}
+\label{fig:boy}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/cap}
+\decoRule
+\caption[Capitano]{Modello 3D del volto del capt. Lawrence a confronto con il relativo concept.}
+\label{fig:cap}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/lt}
+\decoRule
+\caption[Tenente]{Modello 3D del volto del tenente a confronto con il relativo concept.}
+\label{fig:lt}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/props}
+\decoRule
+\caption[Prop]{Alcuni modelli 3D dei prop a confronto con il relativo concept.}
+\label{fig:prop}
+\end{figure}
 
 \section{Texturing}
 Diverse tecniche:

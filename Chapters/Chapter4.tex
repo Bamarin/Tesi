@@ -8,9 +8,33 @@ Così come nella progettazione di un software si passa dall'analisi alla sua pro
 Questo è un passaggio importante poiché non solo permette di capire come il prodotto dovrà essere realizzato, ma permette anche di stabilire delle convenzioni standard (e.g. nomi dei file) da mantenere durante il progetto.
 Quest'ultimo aspetto è indispensabile soprattutto nel caso in cui ci siano più persone a lavorare allo stesso progetto.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.8\textwidth]{Figures/stripe1}\\[40px]
+\includegraphics[width=.8\textwidth]{Figures/stripe2}\\[40px]
+\includegraphics[width=.8\textwidth]{Figures/stripe3}\\[40px]
+\includegraphics[width=.8\textwidth]{Figures/stripe4}\\[10px]
+  \begin{minipage}{.8\textwidth}
+  \footnotesize
+  \emph{(Disegni di Alberto Uras)}
+  \end{minipage}
+\decoRule
+\caption[Storyboard]{Alcune delle scene, tratte dallo storyboard, che verranno mostrate nel trailer}
+\label{fig:story}
+\end{figure}
 %----------------------------------------------------------------------------------------
 %	SECTIONS
 %----------------------------------------------------------------------------------------
+
+\section{Descrizione del Cortometraggio}
+
+Il cortometraggio da realizzare narra le storie di un ragazzo e un ex pirata spaziale, e dell'intreccio delle loro storie.
+Questo corto rappresenta solo il probabile primo episodio di una serie, in esso si vedrà l'incontro dei due protagonisti che, immediatamente, porterà una svolta alla routine quotidiana del ragazzo.
+I due, insieme ad una donna extraterrestre, dovranno affrontare diversi nemici, per poi scappare e far perdere le proprie tracce.
+In particolare il trailer mostrerà alcune delle scene più salienti del cortometraggio (vedi Figura \ref{fig:story}).
+
+
+Esse mostrano alcune azioni dei personaggi che andranno animate come camminata, corsa, sedersi, impugnare oggetti... è quindi necessaria una progettazione accurata del corto ed in particolare delle animazioni.
 
 \section{Progettazione generale}
 
@@ -21,10 +45,10 @@ Tuttavia questi aspetti sono stati prevalentemente coperti da A. Uras, in quanto
 A questo punto del progetto era chiaro che l'obiettivo finale era quello di realizzare un breve trailer di una possibile serie piuttosto che un cortometraggio.
 Si è quindi proceduti a selezionare le scene da realizzare per stare entro i due minuti di tempo di riproduzione.
 
-Fatto ciò ho proceduto col creare un flusso di lavoro, in maniera tale da procedere in modo organizzato.
+Fatto ciò si è proceduti col creare un flusso di lavoro, in maniera tale da procedere in modo organizzato.
 Siccome non ero il solo a lavorare a questo progetto ho scelto un approccio orientato alla produzione, ovvero in cui diversi team si occupano di diversi aspetti del progetto ma che, ciò non di meno, sono collegati e dipendono gli uni dagli altri.
 
-Ad esempio, una volta realizzato il rig base per un modello dev'essere possibile animarlo direttamente, anche senza avere il rig avanzato finale. Ancora più importante è che sia possibile aggiungere dettagli ad un modello, come materiali e textures, anche dopo che questo è stato animato.
+Ad esempio, una volta realizzato il rig base per un modello, quest'ultimo dev'essere possibile animarlo direttamente, anche senza avere il rig avanzato finale. Ancora più importante è che sia possibile aggiungere dettagli ad un modello, come materiali e textures, anche dopo che questo è stato animato.
 Per fare ciò, ho seguito una semplice filosofia: creare l'oggetto una volta e linkarlo in diverse scene invece che copiarlo.
 Questa procedura è analoga a quella di utilizzare delle interfacce nella programmazione ad oggetti invece che le classi direttamente. In questo modo, è possibile modificare una classe in un secondo tempo senza alterarne il suo comportamento e, di conseguenza, chi la utilizza non nota alcuna differenza.
 
@@ -84,6 +108,9 @@ Siccome lo stesso rig verrà utilizzato sia per umani che robot, ha senso far si
 
 \newpage
 Per quanto riguarda il rig della mano un modello molto utilizzato è quello rappresentato in Figura \ref{fig:hand}.
+Esso permette di avere un controllo piuttosto semplice che permetta di eseguire le azioni più comuni relative alla mano, come indicare e afferrare oggetti.
+Per semplificare quest'ultima è possibile aggiungere un driver che controlla allo stesso tempo la chiusura di falangina e falangetta.
+Quando afferriamo un oggetto infatti queste due parti di ogni dito si muovono in maniera coordinata e, a differenza della falange, non è possibile muoverne una in maniera indipendentemente dalle altre. 
 In alcuni casi un osso aggiuntivo è presente per ogni dito, tra la falange e il polso, per permettere un maggiore controllo e livello di dettaglio.
 Nel nostro caso, questa scelta non è stata ritenuta necessaria, preferendo un rig più semplice e più veloce da animare. 
 Un modo più semplice invece, soprattutto usato in videogiochi che utilizzano il minor numero possibile di poligoni, è quello di raggruppare alcune dita.
@@ -100,6 +127,7 @@ Nel caso di rotazione euleriana è anche necessario scegliere l'ordine degli ass
     \item meno usato/non usato -> secondo, causa gimbal lock;
 \end{itemize}
 
+\newpage
 \subsection{Arti inferiori}
 
 \begin{figure}
