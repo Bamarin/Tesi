@@ -14,7 +14,7 @@ Con modellazione digitale, o modellazione 3D, o semplicemente modellazione, per 
 Questa è senz'altro la fare più artistica dell'intero processo di produzione, e una di quelle che più mi ha appassionato.
 
 Una volta definiti i concept art, in gran parte realizzati da A. Uras, il primo passo della produzione è appunto quello di realizzare i modelli dei personaggi, dei prop e delle ambientazioni.
-Per fare ciò, mi sono avvalso di diverse tecniche di modellazione 3D, che possono essere divise nelle seguenti 2 categorie:
+Per fare ciò, sono state usate diverse tecniche di modellazione 3D, che possono essere divise nelle seguenti due categorie:
 \begin{itemize}
     \item Modellazione hard-surface \cite{hardSurf}.
     \item Scultura digitale\cite{3Dsculpt}.
@@ -50,8 +50,8 @@ La caratteristica che lo distingue è la simmetria della struttura e la precisio
 Al contrario, il secondo metodo viene utilizzato per ottenere modelli organici, in pratica tutto ciò che è presente in natura.
 Questi modelli sono particolari, poiché andranno deformati per essere animati.
 Un esempio lampante, in questo progetto, sono i personaggi.
-Nonostante anche in questo caso la simmetria sia fondamentale (ogni personaggio ha 2 braccia e due gambe perfettamente simmetriche), vengono solitamente aggiunti dettagli per rompere la simmetria, siccome in natura nulla è perfettamente simmetrico.
-Anche in questo caso si parte solitamente da delle forme geometriche semplici, tuttavia il processo di modellazione è completamente differente, tant'è che spesso si fa distinzione tra modellazione e scultura digitale (come se i due concetti si escludessero a vicenda).
+Nonostante anche in questo caso la simmetria sia fondamentale (ogni personaggio ha due braccia e due gambe perfettamente simmetriche), vengono solitamente aggiunti dettagli per rompere la simmetria, siccome in natura nulla è perfettamente simmetrico.
+Anche in questo caso si parte solitamente da forme geometriche semplici, tuttavia il processo di modellazione è completamente differente, tant'è che spesso si fa distinzione tra modellazione e scultura digitale (come se i due concetti si escludessero a vicenda).
 Nella scultura digitale infatti non si usano mai operazioni come l'estrusione di una faccia, di fatto il concetto di faccia non viene neanche utilizzato.
 La mesh viene vista come un oggetto compatto, i cui vertici possono essere manipolati attraverso strumenti che emulano le azioni di uno scultore.
 Per questo motivo la scultura digitale è anche il metodo di modellazione preferito dagli artisti.
@@ -143,13 +143,13 @@ In Figura \ref{fig:boy} \ref{fig:cap} \ref{fig:lt} e \ref{fig:prop} sono riporta
 \newpage
 \section{Texturing}
 
-Il processo di texturing serve ad applicare un'immagine alla superficie di un oggetto. Allo scopo di aggiungergli colore e dettagli di rilievo, detti appunto texture.  
+Il processo di texturing serve ad applicare un'immagine alla superficie di un oggetto, allo scopo di aggiungergli colore e dettagli di rilievo, detti appunto texture.  
 Chiaramente i modelli rappresentati nelle figure non possono considerarsi completi senza l'aggiunta di colore.
-Uno degli scopi delle texture è proprio questo, esse infatti permettono di mappare un'immagine alla superficie della mesh.
-Per fare ciò però, la mesh deve prima essere stesa. Questo è possibile farlo in maniera automatica, il problema è che spesso la topologia deve venire spezzata per poterla stendere su un piano.
-In alternativa, per figure complesse, è consigliato farla manualmente, in modo da limitare i ``tagli", che creerebbero discontinuità una volta applicata la texture.
+Uno degli scopi delle texture è proprio questo, esse infatti permettono di mappare un'immagine sulla superficie della mesh.
+Per fare ciò però, la mesh deve prima essere stesa su un piano. Questo è possibile farlo in maniera automatica, il problema è che spesso la topologia deve venire spezzata per poterla stendere su un piano.
+In alternativa, per figure complesse, è consigliato farla manualmente, in modo da limitare i "tagli", che creerebbero discontinuità una volta applicata la texture.
 
-Dopo aver eseguito questa procedura, è possibile creare una texture che si abbini a ciò che è stato ottenuto. Esistono diverse tecniche per fare ciò:
+Dopo aver eseguito questa procedura, è possibile creare una texture da associare a ciò che è stato ottenuto. Esistono diverse tecniche per fare ciò:
 \begin{itemize}
     \item pittura manuale;
     \item generate proceduralmente.
@@ -291,7 +291,7 @@ Indipendentemente dal tipo di scena che si vuole realizzare, il metodo in cui la
 
 \section{Renderizzazione}
 
-Il processo di renderizzazione è ciò che permette di proiettano la scena tridimensionale in un’immagine in una finestra contenuta nello schermo bidimensionale \cite{renderingPipelineDLazzaro}.
+Il processo di renderizzazione è ciò che permette di proiettare la scena tridimensionale in un’immagine in una finestra contenuta nello schermo bidimensionale \cite{renderingPipelineDLazzaro}.
 Per fare ciò, è necessario definire una camera virtuale, attraverso un punto nello spazio tridimensionale che ne definisce la posizione, un vettore che indica la direzione in cui essa è orientata, un angolo che definisce il campo visivo ed infine la profondità oltre la quale non è necessario renderizzare.
 
 Attraverso una serie di trasformazioni, ogni oggetto presente nella scena viene proiettato nel sistema di riferimento della telecamera.
