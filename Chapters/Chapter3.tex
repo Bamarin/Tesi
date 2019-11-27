@@ -1,7 +1,50 @@
 % Chapter 3
 
+% --- Macro \xvec
+\makeatletter
+\newlength\xvec@height%
+\newlength\xvec@depth%
+\newlength\xvec@width%
+\newcommand{\xvec}[2][]{%
+  \ifmmode%
+    \settoheight{\xvec@height}{$#2$}%
+    \settodepth{\xvec@depth}{$#2$}%
+    \settowidth{\xvec@width}{$#2$}%
+  \else%
+    \settoheight{\xvec@height}{#2}%
+    \settodepth{\xvec@depth}{#2}%
+    \settowidth{\xvec@width}{#2}%
+  \fi%
+  \def\xvec@arg{#1}%
+  \def\xvec@dd{:}%
+  \def\xvec@d{.}%
+  \raisebox{.2ex}{\raisebox{\xvec@height}{\rlap{%
+    \kern.05em%  (Because left edge of drawing is at .05em)
+    \begin{tikzpicture}[scale=1]
+    \pgfsetroundcap
+    \draw (.05em,0)--(\xvec@width-.05em,0);
+    \draw (\xvec@width-.05em,0)--(\xvec@width-.15em, .075em);
+    \draw (\xvec@width-.05em,0)--(\xvec@width-.15em,-.075em);
+    \ifx\xvec@arg\xvec@d%
+      \fill(\xvec@width*.45,.5ex) circle (.5pt);%
+    \else\ifx\xvec@arg\xvec@dd%
+      \fill(\xvec@width*.30,.5ex) circle (.5pt);%
+      \fill(\xvec@width*.65,.5ex) circle (.5pt);%
+    \fi\fi%
+    \end{tikzpicture}%
+  }}}%
+  #2%
+}
+\makeatother
 
-\chapter{Concetti di animazione} % Design
+% --- Override \vec with an invocation of \xvec.
+\let\stdvec\vec
+\renewcommand{\vec}[1]{\xvec[]{#1}}
+% --- Define \dvec and \ddvec for dotted and double-dotted vectors.
+\newcommand{\dvec}[1]{\xvec[.]{#1}}
+\newcommand{\ddvec}[1]{\xvec[:]{#1}}
+
+\chapter{Concetti di animazione} 
 
 \label{Chapter3} % For referencing this chapter elsewhere, use \ref{ChapterX}
 
@@ -180,37 +223,156 @@ Nell'equazioni sopra riportate $\theta_1$ e $\theta_2$ si riferiscono agli angol
 $\theta_T$ è l'angolo formato dall'ipotenusa immaginaria che si forma tracciando un segmento dalla radice alla posizione obiettivo dell'end-effector, rispetto alla posizione naturale di $O_1$.
 
 Per casi più complessi, come spesso capita nelle animazioni digitali, viene usato un metodo iterativo  analogo alla risoluzione di un problema di ottimizzazione in programmazione lineare \cite{lp2017}, in cui la funzione obiettivo è data dalle variabili che compongono la posizione e l'orientamento dell'end-effector.
-Ad ogni iterazione si cerca di minimizzare la distanza tra la posizione e orientamento corrente del end-effector, rispetto allo stato ottimo che si vuole raggiungere.
-Per fare ciò esistono diversi metodi \cite{simplex2011, simplex2006} \cite{mingozR2019} \cite{mingozD2019}, tutti comunque utilizzano la matrice Jacobiana.
 
 \subsection{Lo Jacobiano}
 
-Molti meccanismi di utilizzati nell'ambito delle animazioni digitali sono troppo complessi per essere risolti analiticamente. Per questi, il movimento può essere cotruito incrementalmente.
-Per fare ciò viene usata una matrice di derivate parziali chiamata matrice Jacobiana \cite{Parent:2012:CAA:2385444} che ha la seguente struttura.
+Molti meccanismi di utilizzati nell'ambito delle animazioni digitali sono troppo complessi per essere risolti analiticamente.
+Per questi, il movimento può essere costruito in maniera incrementale.
+Ad ogni intervallo temporale dell'iterazione, viene calcolato in che modo cambiare gli angoli di ogni articolazione per far sì che la posizione e l'orientamento corrente dell'end-effector si avvicini a quella desiderata.
+Per fare ciò esistono diversi metodi \cite{simplex2011, simplex2006} \cite{mingozR2019} \cite{mingozD2019}, molti dei quali utilizzano una matrice di derivate parziali chiamata lo Jacobiano, o matrice Jacobiana.
 
-\[J=
-\begin{bmatrix}
-    \dfrac{\partial p_x}{\partial \theta_1} & \dfrac{\partial p_x}{\partial \theta_2} & \dots & \dfrac{\partial p_x}{\partial \theta_n} \\[2ex]
-    \dfrac{\partial p_y}{\partial \theta_1} & \dfrac{\partial p_y}{\partial \theta_2} & \dots & \dfrac{\partial p_y}{\partial \theta_n} \\[2ex]
-    \dfrac{\partial p_z}{\partial \theta_1} & \dfrac{\partial p_z}{\partial \theta_2} & \dots & \dfrac{\partial p_z}{\partial \theta_n} \\[2ex]
-    \dfrac{\partial \alpha_x}{\partial \theta_1} & \dfrac{\partial \alpha_x}{\partial \theta_2} & \dots & \dfrac{\partial \alpha_x}{\partial \theta_n} \\[2ex]
-    \dfrac{\partial \alpha_y}{\partial \theta_1} & \dfrac{\partial \alpha_y}{\partial \theta_2} & \dots & \dfrac{\partial \alpha_y}{\partial \theta_n} \\[2ex]
-    \dfrac{\partial \alpha_z}{\partial \theta_1} & \dfrac{\partial \alpha_z}{\partial \theta_2} & \dots & \dfrac{\partial \alpha_z}{\partial \theta_n} 
-\end{bmatrix}
-\]
+Per spiegare lo Jacobiano da un punto di vista matematico, si considerino le sei funzioni rappresentate in Equazione \ref{eq:linear}, ciascuna delle quali è una funzione in sei variabili indipendenti tra loro.
+Dati i valori di input per le variabili $x_i$, ciascun valore di output $y_i$ può essere calcolato dalla rispettiva funzione $f_i$.
+\begin{equation} \label{eq:linear}
+    \begin{aligned}
+        y_1 = f_1(x_1,x_2,x_3,x_4,x_5,x_6)\\
+        y_2 = f_2(x_1,x_2,x_3,x_4,x_5,x_6)\\
+        y_3 = f_3(x_1,x_2,x_3,x_4,x_5,x_6)\\
+        y_4 = f_4(x_1,x_2,x_3,x_4,x_5,x_6)\\
+        y_5 = f_5(x_1,x_2,x_3,x_4,x_5,x_6)\\
+        y_6 = f_6(x_1,x_2,x_3,x_4,x_5,x_6)
+    \end{aligned}
+\end{equation}
 
-Questa matrice è formata da tante colonne quante sono le articolazioni. Ciascun vettore colonna è poi costituito da 6 componenti, 3 ($x$, $y$ e $z$) per la posizione ($p$) e altre 3 per l'orientamento ($\alpha$).
-Il risultato è un vettore della forma
+Queste equazioni possono anche essere usate per descrivere il cambiamento nelle variabili di output relativo alle variabili di input.
+I differenziali di $y_i$ possono essere scritti in termini dei differenziali delle $x_i$ utilizzando la regola della catena, generando l'Equazione \ref{eq:diff}.
+\begin{equation}\label{eq:diff}
+    dy_i = \dfrac{\partial f_i}{\partial x_1}dx_1+
+        \dfrac{\partial f_i}{\partial x_2}dx_2+
+        \dfrac{\partial f_i}{\partial x_3}dx_3+
+        \dfrac{\partial f_i}{\partial x_4}dx_4+
+        \dfrac{\partial f_i}{\partial x_5}dx_5+
+        \dfrac{\partial f_i}{\partial x_6}dx_6
+\end{equation}
+Le Equazioni \ref{eq:linear} e \ref{eq:diff} possono essere possono essere rappresentate in forma vettoriale, producendo le equazioni \ref{eq:vecLin} e \ref{eq:vecDif}, rispettivamente.
+\begin{align}
+    \label{eq:vecLin}
+    dY =  \dfrac{\partial F}{\partial X}dX\\[5ex]
+    \label{eq:vecDif}
+    dY =  \dfrac{\partial F}{\partial X}dX
+\end{align}
 
-\[V=
-\begin{bmatrix}
-v_x & v_y & v_z & \omega_x & \omega_y & \omega_z
-\end{bmatrix}
-^T\]    
+Una matrice di derivate parziali, $\frac{\partial F}{\partial X}dX$, viene chiamata \emph{Jacobiana} ed è una funzione dei valori correnti delle $x_i$. Lo Jacobiano può essere visto come l'associamento delle velocità (ad intervallo di tempo regolare) $X$ alle velocità $Y$ (Eq. \ref{eq:velocity}).
+\begin{equation}\label{eq:velocity}
+    \dot{Y} = J(X)\dot{X}
+\end{equation}
 
-dove $v$ e $\omega$ sono due vettori in uno spazio 3D, il primo lineare e indica lo spostamento, il secondo rotazionale indica la rotazione.
+In qualunque momento, lo Jacobiano è una funzione delle $x_i$. All'iterazione successiva, $X$ sarà cambiata e, allo stesso modo lo sarà la trasformazione rappresentata dallo Jacobiano.
 
-Blender propone anche un metodo alternativo per risolvere la cinematica inversa che tiene conto anche di altri vincoli definiti dall'utente \cite{blendDoc}. Questo metodo si chiama iTaSC e, come il metodo standard, utilizza una matrice Jacobiana, ma il modo in cui la calcola è diverso \cite{blendWiki}.
+Quando si applica lo Jacobiano ad una catena di ossa, le variabili di input, $x_i$, rappresentano i valori delle articolazioni, e le variabili di output, $y_i$, quelli dell'end-effector (reppresentati come angoli $x,y,z$).
+\begin{equation}
+    Y=
+    \begin{bmatrix}
+        p_x & p_y & p_z & \alpha_x & \alpha_y & \alpha_z
+    \end{bmatrix}
+    ^T    
+\end{equation}
+
+In questo caso, lo Jacobiano associa le velocità degli angoli delle articolazioni, $\dot{\theta}$, alle velocità della posizione e orientamento dell'end-effector, $\dot{Y}$ (Eq. \ref{eq:Jangle}).
+\begin{equation}\label{eq:Jangle}
+    V = \dot{Y} = J(\theta)\dot{\theta}
+\end{equation}
+
+$V$ è il vettore delle velocità lineari e angolari, e rappresenta la trasformazione che si vuole applicare all'end-effector.
+Tale trasformazione si basa sulla differenza tra la posizione/rotazione corrente e quella specificata come obiettivo.
+Queste velocità sono vettori in uno spazio tridimensionale, pertanto ciascuna ha tre componenti, $x$, $y$ e $z$ (Eq. \ref{eq:Vgoal}).
+\begin{equation}\label{eq:Vgoal}
+    V=
+    \begin{bmatrix}
+        v_x & v_y & v_z & \omega_x & \omega_y & \omega_z
+    \end{bmatrix}
+    ^T
+\end{equation}
+
+$\dot{\theta}$ è un vettore delle velocità delle articolazione, in altre parole, contiene i cambiamenti dei parametri di ogni articolazione, ovvero le incognite dell'equazione (Eq. \ref{eq:Vartic}).
+\begin{equation}\label{eq:Vartic}
+    \dot{\theta}=
+    \begin{bmatrix}
+        \dot{\theta}_1 & \dot{\theta}_2 & \dot{\theta}_3 \ldots \dot{\theta}_n
+    \end{bmatrix}
+    ^T
+\end{equation}
+
+La matrice Jacobiana, $J$, è una matrice che associa i due vettori appena visti, ed è una funzione della posa corrente (Eq. \ref{eq:Jacobian}).
+
+\begin{equation}\label{eq:Jacobian}
+    J=
+    \begin{bmatrix}
+        \dfrac{\partial p_x}{\partial \theta_1} & \dfrac{\partial p_x}{\partial \theta_2} & \dots & \dfrac{\partial p_x}{\partial \theta_n} \\[2ex]
+        \dfrac{\partial p_y}{\partial \theta_1} & \dfrac{\partial p_y}{\partial \theta_2} & \dots & \dfrac{\partial p_y}{\partial \theta_n} \\[2ex]
+        \vdots & \vdots & \ddots & \vdots \\[2ex]
+        \dfrac{\partial \alpha_z}{\partial \theta_1} & \dfrac{\partial \alpha_z}{\partial \theta_2} & \dots & \dfrac{\partial \alpha_z}{\partial \theta_n} 
+    \end{bmatrix}
+\end{equation}
+
+Ogni termine dello Jacobiano rapporta il cambiamento di una specifica articolazione ad uno specifico cambiamento dell'end-effector.
+Per una giuntura rivolutiva (i.e. che ruota su un singolo asse), il cambiamento di rotazione nell'end effector, $\omega$, è semplicemente la velocità angolare dell'articolazione intorno all'asse di rotazione per la giunzione che si sta considerando.
+Per un'articolazione prismatica, in cui un osso trasla rispetto al padre, la rotazione dell'end-effector rimane inalterata dal cambiamento nell'articolazione.
+Per un'articolazione rotazionale, la trasformazione lineare nell'end-effector è il risultato del prodotto vettoriale tra l'asse di rivoluzione e il vettore che parte dall'articolazione, fino all'end-effector.
+La rotazione di un articolazione rotazionale induce uno spostamento istantaneo dell'end-effector.
+Per un'articolazione prismatica, lo spostamento equivale a quello dell'articolazione (vedi Fig. \ref{fig:velocities}).
+
+FIGURE 5.16 PLACEHOLDER\label{fig:velocities}
+
+Le velocità lineari e angolari desiderate sono calcolate trovando la differenza tra la configurazione dell'end-effector corrente e quella obiettivo. Le velocità indotte dalla rotazione di una specifica articolazione, sono determinate dai calcoli mostrati in Figura \ref{fig:velocities}.
+Il problema sta nel determinare la migliore combinazione lineare delle velocità, indotte dalle varie articolazioni, che risulti nelle velocità desiderate nell'end-effector.
+Lo Jacobiano è il risultato della rappresentazione del problema descritto, in forma di matrice.
+
+È importante che, nel rappresentare il problema in forma Jacobiana, tutte le coordinate dei valori delle articolazioni, siano rappresentate come coordinate dello stesso sistema (e.g. coordinate globali).
+Spesso infatti, le informazioni relative ad una particolare articolazione sono rappresentate nel sistema di coordinate locale a quell'articolazione.
+Durante la creazione della matrice Jacobiana, queste informazione devono essere convertite in un sistema di coordinate comune, come quello delle coordinate globali, o dell'end-effector.
+Esistono diversi metodi per calcolare lo Jacobiano che si basano sul massimizzare l'efficienza computazionale date le informazioni in coordinate locali, tutti però producono il risultato in un sistema di coordinate comune.
+
+FIGURE 5.17 PLACEHOLDER\label{fig:IKex0}
+
+Per fare un esempio inerente a questo progetto, si consideri lo scheletro di uno qualunque dei personaggi, in particolare il suo braccio.
+In questo caso ci si può limitare ad un movimento in un piano fissato, che quindi esclude dal problema una delle tre dimensioni e vincola le rotazione ad un unico asse ($z$).
+In Figura \ref{fig:IKex0} si vuole spostare l'end-effector, rappresentato dal polso ($A_2$), nel punto $P$. In questo caso particolare, l'orientamento della mano non ha importanza.
+L'asse di rotazione di ogni articolazione ($A_i$) è perpendicolare alla figura ed esce dal foglio.
+L'effetto di una rotazione incrementale, $r_i$, di ciascuna articolazione, è dato dal prodotto vettoriale tra l'asse dell'articolazione e il vettore che collega quest'ultima all'end-effector, $\vec{V_i}$ (vedi Fig \ref{fig:IKex1}), e costituisce le colonne della matrice Jacobiana.
+È importante notare come ogni rotazione di un'articolazione influenzi tutte quelle successive. Di conseguenza, le prime hanno un'intensità maggiore rispetto alle ultime ($r_1>r_2>r_3$). In termini tecnici la lunghezza di ogni $r_i$ è funzione della distanza tra la posizione della rispettiva articolazione dall'end-effector.
+
+FIGURE 5.18 PLACEHOLDER\label{fig:IKex1}
+
+La trasformazione da applicare all'end-effector è il risultato della differenza tra la sua posizione corrente e quella obiettivo (Eq. \ref{eq:Vresult}).
+\begin{equation}\label{eq:Vresult}
+    V=
+    \begin{bmatrix}
+        (P - A_2)_x\\
+        (P - A_2)_y\\
+        (P - A_2)_z
+    \end{bmatrix}
+\end{equation}
+
+Il vettore delle trasformazioni che si vogliono applicare è uguale alla matrice Jacobiana (Eq. \ref{eq:Jresult}) moltiplicata per il vettore delle incognite, date dali cambiamenti negli angoli delle articolazioni.
+\begin{equation}\label{eq:Jresult}
+    J=
+    \begin{bmatrix}
+        \big((0,0,1) \times A_2\big)_x & \big((0,0,1) \times A_1\big)_x\\
+        \big((0,0,1) \times A_2\big)_y & \big((0,0,1) \times A_1\big)_y\\
+        \big((0,0,1) \times A_2\big)_z & \big((0,0,1) \times A_1\big)_z
+    \end{bmatrix}
+\end{equation}
+
+Una volta calcolato lo Jacobiano, bisogna risolvere un'equazione nella forma mostrata in Equazione \ref{eq:J+1}. Nel caso $J$ sia una matrice quadrata, l'inversa dello Jacobiano, $J^{-1}$, può essere utilizzata per calcolare le velocità angolari delle articolazioni, date quelle dell'end-effector (Eq. \ref{eq:J-1}).
+\begin{align}
+    \label{eq:J+1}
+    V &= J\dot{\theta}\\
+    \label{eq:J-1}
+    J^{-1}V &= \dot{\theta}
+\end{align}
+
+Blender propone due metodi per risolvere la cinematica inversa, uno di questi tiene conto anche di altri vincoli definiti dall'utente \cite{blendDoc}. Questo metodo si chiama iTaSC e, come il metodo standard, utilizza una matrice Jacobiana, ma il modo in cui la calcola è differente \cite{blendWiki}.
 
 Un motivo per cui il metodo iterativo è migliore di quello analitico, oltre ad essere l'unico metodo per risolvere articolazioni complesse, è che, nel caso in cui la posizione obiettivo si trovi al di fuori dello spazio raggiungibile, (e.g. la mano deve raggiungere un punto troppo distante dalla spalla) non esiste nessuna soluzione e in questo caso il risultato può e dev'essere approssimato.
 
