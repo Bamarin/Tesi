@@ -200,6 +200,7 @@ IK serve anche a fare in modo che una serie di ossa mantenga un estremo (i.e. \e
 Definite la posizione della mano e della radice (spalla) la posizione delle ossa intermedie viene calcolata automaticamente.
 Esistono diverse tecniche per il calcolo degli angoli delle articolazioni intermedie.
 
+\subsection{Soluzione analitica}
 Nel caso di articolazioni relativamente semplici è possibile calcolare l'intero spazio delle soluzioni analiticamente, ed individuare tra di esse quelle che soddisfano l'obiettivo.
 Ad esempio, nel caso di un sistema di due ossa ($O_1$ e $O_2$) e due articolazioni in uno spazio 2D come in Figura \ref{fig:IK} lo spazio raggiungibile dall'\emph{end-effector} può essere descritto come 
 \begin{equation*}
@@ -208,7 +209,13 @@ Ad esempio, nel caso di un sistema di due ossa ($O_1$ e $O_2$) e due articolazio
 \newpage
 Data la posizione $(X,Y)$ obiettivo dell'\emph{end-effector}, se questa cade all'interno dello spazio raggiungibile, è possibile attraverso le formule trigonometriche, ricavare gli angoli delle 2 articolazioni:
 
-FIGURE 5.15 PLACEHOLDER 
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{Figures/15}
+\decoRule
+\caption[Soluzione analitica]{Soluzione analitica ad un semplice problema di cinematica inversa}
+\label{fig:5.16}
+\end{figure}
 
 \begin{align}
     \arccos{ (\theta _T) } &=  \frac{X}{\sqrt{X^2+Y^2}}\\
@@ -226,10 +233,10 @@ Per casi più complessi, come spesso capita nelle animazioni digitali, viene usa
 
 \subsection{Lo Jacobiano}
 
-Molti meccanismi di utilizzati nell'ambito delle animazioni digitali sono troppo complessi per essere risolti analiticamente.
+Molti meccanismi utilizzati nell'ambito delle animazioni digitali sono troppo complessi per essere risolti analiticamente.
 Per questi, il movimento può essere costruito in maniera incrementale.
 Ad ogni intervallo temporale dell'iterazione, viene calcolato in che modo cambiare gli angoli di ogni articolazione per far sì che la posizione e l'orientamento corrente dell'end-effector si avvicini a quella desiderata.
-Per fare ciò esistono diversi metodi \cite{simplex2011, simplex2006} \cite{mingozR2019} \cite{mingozD2019}, molti dei quali utilizzano una matrice di derivate parziali chiamata lo Jacobiano, o matrice Jacobiana.
+Per fare ciò esistono diversi metodi \cite{simplex2011, simplex2006} \cite{mingozR2019} \cite{mingozD2019} \cite{blendWiki}, molti dei quali utilizzano una matrice di derivate parziali chiamata lo Jacobiano, o matrice Jacobiana.
 
 Per spiegare lo Jacobiano da un punto di vista matematico, si considerino le sei funzioni rappresentate in Equazione \ref{eq:linear}, ciascuna delle quali è una funzione in sei variabili indipendenti tra loro.
 Dati i valori di input per le variabili $x_i$, ciascun valore di output $y_i$ può essere calcolato dalla rispettiva funzione $f_i$.
@@ -257,7 +264,7 @@ I differenziali di $y_i$ possono essere scritti in termini dei differenziali del
 Le Equazioni \ref{eq:linear} e \ref{eq:diff} possono essere possono essere rappresentate in forma vettoriale, producendo le equazioni \ref{eq:vecLin} e \ref{eq:vecDif}, rispettivamente.
 \begin{align}
     \label{eq:vecLin}
-    dY =  \dfrac{\partial F}{\partial X}dX\\[5ex]
+    Y =  F(X)\\[5ex]
     \label{eq:vecDif}
     dY =  \dfrac{\partial F}{\partial X}dX
 \end{align}
@@ -269,7 +276,7 @@ Una matrice di derivate parziali, $\frac{\partial F}{\partial X}dX$, viene chiam
 
 In qualunque momento, lo Jacobiano è una funzione delle $x_i$. All'iterazione successiva, $X$ sarà cambiata e, allo stesso modo lo sarà la trasformazione rappresentata dallo Jacobiano.
 
-Quando si applica lo Jacobiano ad una catena di ossa, le variabili di input, $x_i$, rappresentano i valori delle articolazioni, e le variabili di output, $y_i$, quelli dell'end-effector (reppresentati come angoli $x,y,z$).
+Quando si applica lo Jacobiano ad una catena di ossa, le variabili di input, $x_i$, rappresentano i valori delle articolazioni, e le variabili di output, $y_i$, quelli dell'end-effector (rappresentati come angoli $x,y,z$).
 \begin{equation}
     Y=
     \begin{bmatrix}
@@ -298,7 +305,7 @@ $\dot{\theta}$ è un vettore delle velocità delle articolazione, in altre parol
 \begin{equation}\label{eq:Vartic}
     \dot{\theta}=
     \begin{bmatrix}
-        \dot{\theta}_1 & \dot{\theta}_2 & \dot{\theta}_3 \ldots \dot{\theta}_n
+        \dot{\theta}_1 & \dot{\theta}_2 & \ldots & \dot{\theta}_n
     \end{bmatrix}
     ^T
 \end{equation}
@@ -322,7 +329,28 @@ Per un'articolazione rotazionale, la trasformazione lineare nell'end-effector è
 La rotazione di un articolazione rotazionale induce uno spostamento istantaneo dell'end-effector.
 Per un'articolazione prismatica, lo spostamento equivale a quello dell'articolazione (vedi Fig. \ref{fig:velocities}).
 
-FIGURE 5.16 PLACEHOLDER\label{fig:velocities}
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{Figures/16a}
+  \caption{Velocità angolare, $\omega_i$}
+  \label{fig:angolarA}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{Figures/16b}
+  \caption{Velocità lineare, $Z\times(E-J_i)$}
+  \label{fig:linearB}
+\end{subfigure}\\[2ex]
+  \begin{minipage}{.8\textwidth}
+  \footnotesize
+  \emph{$E-$end effector\\$J_i-$i-esima articolazione\\$Z-$asse di rotazione\\$\omega_i-$velocità angolare dell'i-esima articolazione}
+  \end{minipage}
+\decoRule
+\caption[Velocità di un'articolazione]{Velocità angolare e lineare indotte dalla rotazione di un'articolazione intorno al proprio asse.}
+\label{fig:velocities}
+\end{figure}
 
 Le velocità lineari e angolari desiderate sono calcolate trovando la differenza tra la configurazione dell'end-effector corrente e quella obiettivo. Le velocità indotte dalla rotazione di una specifica articolazione, sono determinate dai calcoli mostrati in Figura \ref{fig:velocities}.
 Il problema sta nel determinare la migliore combinazione lineare delle velocità, indotte dalle varie articolazioni, che risulti nelle velocità desiderate nell'end-effector.
@@ -333,16 +361,28 @@ Spesso infatti, le informazioni relative ad una particolare articolazione sono r
 Durante la creazione della matrice Jacobiana, queste informazione devono essere convertite in un sistema di coordinate comune, come quello delle coordinate globali, o dell'end-effector.
 Esistono diversi metodi per calcolare lo Jacobiano che si basano sul massimizzare l'efficienza computazionale date le informazioni in coordinate locali, tutti però producono il risultato in un sistema di coordinate comune.
 
-FIGURE 5.17 PLACEHOLDER\label{fig:IKex0}
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/17}
+\decoRule
+\caption[IK: Esempio concreto]{Esempio di catena formata da due articolazioni che possono ruotare su un piano.}
+\label{fig:IKex0}
+\end{figure}
 
 Per fare un esempio inerente a questo progetto, si consideri lo scheletro di uno qualunque dei personaggi, in particolare il suo braccio.
 In questo caso ci si può limitare ad un movimento in un piano fissato, che quindi esclude dal problema una delle tre dimensioni e vincola le rotazione ad un unico asse ($z$).
 In Figura \ref{fig:IKex0} si vuole spostare l'end-effector, rappresentato dal polso ($A_2$), nel punto $P$. In questo caso particolare, l'orientamento della mano non ha importanza.
 L'asse di rotazione di ogni articolazione ($A_i$) è perpendicolare alla figura ed esce dal foglio.
 L'effetto di una rotazione incrementale, $r_i$, di ciascuna articolazione, è dato dal prodotto vettoriale tra l'asse dell'articolazione e il vettore che collega quest'ultima all'end-effector, $\vec{V_i}$ (vedi Fig \ref{fig:IKex1}), e costituisce le colonne della matrice Jacobiana.
-È importante notare come ogni rotazione di un'articolazione influenzi tutte quelle successive. Di conseguenza, le prime hanno un'intensità maggiore rispetto alle ultime ($r_1>r_2>r_3$). In termini tecnici la lunghezza di ogni $r_i$ è funzione della distanza tra la posizione della rispettiva articolazione dall'end-effector.
+È importante notare come ogni rotazione di un'articolazione influenzi tutte quelle successive. Di conseguenza, le prime hanno un'intensità maggiore rispetto alle ultime ($r_1>r_2$). In termini tecnici la lunghezza di ogni $r_i$ è funzione della distanza tra la posizione della rispettiva articolazione dall'end-effector.
 
-FIGURE 5.18 PLACEHOLDER\label{fig:IKex1}
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/18}
+\decoRule
+\caption[Movimento indotto]{Modifiche istantanee della posizione indotte dall'angolo di rotazione delle articolazioni.}
+\label{fig:IKex1}
+\end{figure}
 
 La trasformazione da applicare all'end-effector è il risultato della differenza tra la sua posizione corrente e quella obiettivo (Eq. \ref{eq:Vresult}).
 \begin{equation}\label{eq:Vresult}
@@ -354,13 +394,13 @@ La trasformazione da applicare all'end-effector è il risultato della differenza
     \end{bmatrix}
 \end{equation}
 
-Il vettore delle trasformazioni che si vogliono applicare è uguale alla matrice Jacobiana (Eq. \ref{eq:Jresult}) moltiplicata per il vettore delle incognite, date dali cambiamenti negli angoli delle articolazioni.
+Il vettore delle trasformazioni che si vogliono applicare è uguale alla matrice Jacobiana (Eq. \ref{eq:Jresult}) moltiplicata per il vettore delle incognite, date dai cambiamenti negli angoli delle articolazioni.
 \begin{equation}\label{eq:Jresult}
     J=
     \begin{bmatrix}
-        \big((0,0,1) \times A_2\big)_x & \big((0,0,1) \times A_1\big)_x\\
-        \big((0,0,1) \times A_2\big)_y & \big((0,0,1) \times A_1\big)_y\\
-        \big((0,0,1) \times A_2\big)_z & \big((0,0,1) \times A_1\big)_z
+        \big((0,0,1) \times A_2\big)_x & \big((0,0,1) \times (A_2-A_1)\big)_x\\
+        \big((0,0,1) \times A_2\big)_y & \big((0,0,1) \times (A_2-A_1)\big)_y\\
+        \big((0,0,1) \times A_2\big)_z & \big((0,0,1) \times (A_2-A_1)\big)_z
     \end{bmatrix}
 \end{equation}
 
@@ -371,6 +411,30 @@ Una volta calcolato lo Jacobiano, bisogna risolvere un'equazione nella forma mos
     \label{eq:J-1}
     J^{-1}V &= \dot{\theta}
 \end{align}
+
+Se l'inverso dello Jacobiano non esiste, allora si dice che il sistema è singolare per gli angoli  assegnati tra le articolazioni.
+Una singolarità si verifica quando non è possibile formare una combinazione lineare delle velocità dell'angolo articolare per produrre le velocità desiderate dell'effettore finale.
+Come semplice esempio di una situazione del genere, consideriamo un braccio planare completamente esteso con una posizione dell'obiettivo posizionata sull'avambraccio (vedi Figura \ref{fig:singol}).
+In tal caso, un cambiamento in ciascun angolo dell’articolazione produrrebbe un vettore perpendicolare alla direzione desiderata. Ovviamente, nessuna combinazione lineare di questi vettori potrebbe produrre il vettore di movimento desiderato. Tutte le singolarità di un sistema non possono essere determinate semplicemente ispezionando visivamente le possibili configurazioni geometriche del collegamento.
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{Figures/planarextendedarm}
+\decoRule
+\caption[Configurazione singolare]{Semplice esempio di una configurazione singolare.}
+\label{fig:singol}
+\end{figure}
+
+Inoltre, anche una configurazione che si avvicina solo all'essere una singolarità può ancora presentare gravi problemi.
+Se i giunti del collegamento nella Figura \ref{fig:singol} sono leggermente perturbati, la configurazione non è singolare.
+Tuttavia, per formare una combinazione lineare dei vettori di cambiamento istantaneo risultanti, è necessario utilizzare valori molto grandi.
+Ciò si traduce in grandi impulsi vicino ad aree di singolarità.
+Questi devono essere bloccati a valori più ragionevoli.
+Anche in questo caso, l'errore numerico può provocare movimenti imprevedibili.
+I problemi con le singolarità possono essere ridotti se il manipolatore è ridondante, quando vi sono più DOF di quanti siano i vincoli da soddisfare.
+In questo caso, lo Jacobiano non è una matrice quadrata e, potenzialmente, esiste un numero infinito di soluzioni al problema IK.
+Poiché il Jacobiano  non è quadrato, non esiste l’ inverso convenzionale.
+Tuttavia, se le colonne di J sono linearmente indipendenti, esiste la Pseudoinversa.
+Numerose sono le tecniche numeriche basate sulla regolarizzazione dell’operatore Jacobiano per risolvere il problema limitando l’effetto dei problemi numerici \cite{buss2006} \cite{buss2005}.
 
 Blender propone due metodi per risolvere la cinematica inversa, uno di questi tiene conto anche di altri vincoli definiti dall'utente \cite{blendDoc}. Questo metodo si chiama iTaSC e, come il metodo standard, utilizza una matrice Jacobiana, ma il modo in cui la calcola è differente \cite{blendWiki}.
 

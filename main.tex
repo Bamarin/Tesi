@@ -29,7 +29,7 @@
 %oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
 italian, % ngerman for German
 singlespacing, % Single line spacing, alternatives: onehalfspacing or doublespacing
-draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
+%draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
 %nolistspacing, % If the document is onehalfspacing or doublespacing, uncomment this to set spacing in lists to single
 %liststotoc, % Uncomment to add the list of figures/tables/etc to the table of contents
 %toctotoc, % Uncomment to add the main table of contents to the table of contents
@@ -52,6 +52,7 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 \usepackage{comment}
+\usepackage{float}
 \usepackage{textcomp}
 \usepackage{subcaption}
 \usepackage[T1]{fontenc}  % For correct {}s in \texttt
@@ -69,7 +70,7 @@ headsepline, % Uncomment to get a line under the header
 	outer=3.8cm, % Outer margin
 	bindingoffset=.5cm, % Binding offset
 	top=1.5cm, % Top margin
-	bottom=1.5cm, % Bottom margin
+	bottom=2cm, % Bottom margin
 	%showframe, % Uncomment to show how the type block is set on the page
 }
 
@@ -96,7 +97,7 @@ headsepline, % Uncomment to get a line under the header
 \hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
 \hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
 \hypersetup{pdfkeywords=\keywordnames} % Set the PDF's keywords to your keywords
-\hypersetup{colorlinks=false}
+\hypersetup{colorlinks=true}
 }
 
 \begin{document}
@@ -111,9 +112,11 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{titlepage}
 \begin{center}
+\begingroup
+    \fontsize{11pt}{12pt}\selectfont
 
 \vspace*{.06\textheight}
-{\scshape \MakeUppercase{\univname}\\\campname\par}\vspace{1.5cm} % University name
+{\scshape\MakeUppercase{\univname}\\\campname\par}\vspace{1.5cm} % University name
 \textsc{\deptname\\\facname}\\ % Thesis type
 
 \vfill
@@ -140,12 +143,54 @@ headsepline, % Uncomment to get a line under the header
  
 \vfill
 
+{\large SESSIONE UNICA}\\
 {\large Anno Accademico 2018 --- 2019}\\[4cm] % Date
 %\includegraphics{Logo} % University/department logo - uncomment to place it
  
 \vfill
+\endgroup
 \end{center}
 \end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	DECLARATION PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{comment}
+\begin{declaration}
+\addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
+\noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
+
+\begin{itemize} 
+\item This work was done wholly or mainly while in candidature for a research degree at this University.
+\item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
+\item Where I have consulted the published work of others, this is always clearly attributed.
+\item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
+\item I have acknowledged all main sources of help.
+\item Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself.\\
+\end{itemize}
+ 
+\noindent Signed:\\
+\rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
+ 
+\noindent Date:\\
+\rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
+\end{declaration}
+
+\cleardoublepage
+\end{comment}
+
+%----------------------------------------------------------------------------------------
+%	QUOTATION PAGE
+%----------------------------------------------------------------------------------------
+
+\vspace*{0.2\textheight}
+
+\noindent\enquote{\itshape People gain a tremendous amount of wisdom when they travel\ldots\\[2ex]
+get lost, and maybe you'll find yourself somewhere.}\bigbreak
+
+
+\hfill Bryan Cranston
 
 %----------------------------------------------------------------------------------------
 %	ABSTRACT PAGE
@@ -157,10 +202,10 @@ headsepline, % Uncomment to get a line under the header
 
 Questa tesi vuole mostrare il processo di produzione di un cortometraggio, da un punto di vista progettuale.
 Vengono quindi analizzate le fasi della produzione, come la modellazione e la realizzazione delle animazioni.
-Oltre ad esse sono trattate anche alcune fasi precedenti alla produzione, come la progettazione delle animazioni, e del cortometraggio in generale.
+Oltre ad esse sono trattate anche alcune fasi precedenti alla produzione, come la progettazione delle animazioni, e del corto in generale.
 Il focus principale sono quindi proprio le animazioni e la teoria dietro di esse.
-Infatti per capire come progettare e realizzare animazioni in maniera efficiente, si rende necessario capire come funzionino da un punto di vista scientifico e ingegneristico.
-A tale scopo, vengono illustrati alcuni concetti teorici delle animazioni, con alcuni richiami alla matematica, quali matrici e formule trigonometriche, ed altri di programmazione lineare, come il metodo del simplesso per risolvere un problema di ottimizzazione.
+Infatti per capire come progettare e realizzare animazioni in maniera efficiente, è necessario capire come funzionino da un punto di vista scientifico e ingegneristico.
+A tale scopo, vengono illustrati alcuni concetti teorici delle animazioni, con alcuni richiami alla matematica, quali matrici e formule trigonometriche ed altri di programmazione lineare per risolvere un problema di ottimizzazione.
 
 La scelta di realizzare un cortometraggio deriva dal fatto che questo è il prodotto che meglio rappresenta un lavoro sulle animazioni.
 Un altro approccio sarebbe potuto essere quello di realizzare un videogioco, ma in esso ci sono innumerevoli altri aspetti da progettare, e le animazioni non ricoprono altro che una minima frazione del prodotto finale.
@@ -171,26 +216,24 @@ Per progettarle e realizzarle è stato fatto uso di tecniche che mirano a sempli
 Il risultato non è da considerare sorprendente: sono state utilizzate tecniche già da tempo consolidate.
 Il punto non è infatti quello di sperimentare nuove tecniche in assoluto.
 Ciò nonostante, le tecniche che sono state utilizzare erano comunque relativamente nuove per noi, in quanto nessuno di noi le aveva mai messe in pratica.
-
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
 %	ACKNOWLEDGEMENTS
 %----------------------------------------------------------------------------------------
-\begin{comment}
 
 \begin{acknowledgements}
 \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
-Persone da ringraziare\ldots
-\begin{itemize}
-    \item relatore
-    \item familiari
-    \item amici
-\end{itemize}
+La stesura di questa tesi è stata una bella sfida. Il doverla portare a termine lontano da casa mi ha messo a dura prova, soprattutto psicologicamente.
+Per questo motivo vorrei ringraziare tutti coloro che, nonostante la distanza, mi sono stati vicino. In particolare la mia famiglia, che mi ha supportato in ogni scelta, anche in quelle più rischiose, come appunto quella di partire per la Svezia prima di aver completato gli studi.
+Tutti i miei amici, ai quali non ho mai smesso di pensare.
+Ed infine, un grazie immenso alla mia relatrice, che mi ha aiutato a redarre questo documento in maniera meticolosa.
+
+
+
 
 \end{acknowledgements}
 
-\end{comment}
 
 %----------------------------------------------------------------------------------------
 %	LIST OF CONTENTS/FIGURES/TABLES PAGES
@@ -251,10 +294,12 @@ $\omega$ & angular frequency & \si{\radian} \\
 \end{symbols}
 
 %----------------------------------------------------------------------------------------
-%	DEDICATION
+%	DEDICATION/CITATION
 %----------------------------------------------------------------------------------------
 
-\dedicatory{For/Dedicated to/To my\ldots} 
+\dedicatory{``People gain a tremendous amount of wisdom when they travel\ldots\\[2ex]
+get lost, and maybe you'll find yourself somewhere''} 
+Bryan Cranston
 
 \end{comment}
 

@@ -3,17 +3,13 @@
 \chapter{Progettazione} % Main chapter title
 
 \label{Chapter4} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
-
-Così come nella progettazione di un software si passa dall'analisi alla sua progettazione, prima di svilupparlo, anche in questo caso, è opportuno progettare l'intero cortometraggio, prima di realizzarlo.
-Questo è un passaggio importante poiché non solo permette di capire come il prodotto dovrà essere realizzato, ma permette anche di stabilire delle convenzioni standard (e.g. nomi dei file) da mantenere durante il progetto.
-Quest'ultimo aspetto è indispensabile soprattutto nel caso in cui ci siano più persone a lavorare allo stesso progetto.
-
-\begin{figure}[ht]
+\begin{figure}
 \centering
-\includegraphics[width=.8\textwidth]{Figures/stripe1}\\[40px]
-\includegraphics[width=.8\textwidth]{Figures/stripe2}\\[40px]
-\includegraphics[width=.8\textwidth]{Figures/stripe3}\\[40px]
-\includegraphics[width=.8\textwidth]{Figures/stripe4}\\[10px]
+\includegraphics[width=.8\textwidth]{Figures/stripe1}\\[20px]
+\includegraphics[width=.8\textwidth]{Figures/stripe2}\\[20px]
+\includegraphics[width=.8\textwidth]{Figures/stripe3}\\[20px]
+\includegraphics[width=.8\textwidth]{Figures/stripe4}\\[20px]
+\includegraphics[width=.8\textwidth]{Figures/stripe5}\\[10px]
   \begin{minipage}{.8\textwidth}
   \footnotesize
   \emph{(Disegni di Alberto Uras)}
@@ -22,6 +18,10 @@ Quest'ultimo aspetto è indispensabile soprattutto nel caso in cui ci siano più
 \caption[Storyboard]{Alcune delle scene, tratte dallo storyboard, che verranno mostrate nel trailer}
 \label{fig:story}
 \end{figure}
+Così come nella progettazione di un software si passa dall'analisi alla sua progettazione, prima di svilupparlo, anche in questo caso, è opportuno progettare l'intero cortometraggio, prima di realizzarlo.
+Questo è un passaggio importante poiché non solo permette di capire come il prodotto dovrà essere realizzato, ma permette anche di stabilire delle convenzioni standard (e.g. nomi dei file) da mantenere durante il progetto.
+Quest'ultimo aspetto è indispensabile soprattutto nel caso in cui ci siano più persone a lavorare allo stesso progetto.
+
 %----------------------------------------------------------------------------------------
 %	SECTIONS
 %----------------------------------------------------------------------------------------
@@ -69,7 +69,6 @@ La progettazione delle animazione consiste dunque nell'ideare un rig che permett
 Per progettare un buon rig serve, prima di tutto, individuarne l'obiettivo, per rendere il rig il più semplice possibile.
 Di seguito sono riportati alcuni degli obiettivi individuati e per le diverse parti di un rig.
 
-\newpage
 \subsection{Arti superiori}
 
 \begin{figure}
@@ -106,7 +105,6 @@ Siccome lo stesso rig verrà utilizzato sia per umani che robot, ha senso far s�
 \label{fig:hand}
 \end{figure}
 
-\newpage
 Per quanto riguarda il rig della mano un modello molto utilizzato è quello rappresentato in Figura \ref{fig:hand}.
 Esso consente di avere un controllo piuttosto semplice che permetta di eseguire le azioni più comuni relative alla mano, come indicare e afferrare oggetti.
 Per semplificare quest'ultima è possibile aggiungere un driver che controlla allo stesso tempo la chiusura di falangina e falangetta.
@@ -120,21 +118,20 @@ Siccome per le dita non è necessario avere un IK, non sono necessarie ulteriori
 Ora che le articolazioni sono state individuate e, per ciascuna di esse, si sa quanti DOF serviranno, è possibile procedere con la scelta della giusta rappresentazione di rotazione (\ref{Section3.1} Rappresentazioni di rotazione).
 Basandoci su quanto visto nel Capitolo \ref{Chapter3}, si può dedurre che per le articolazioni con 3 DOF andranno utilizzati dei quaternioni. Mentre per le altre è possibile usare gli angoli di Eulero.
 
-\newpage
-\begin{figure}
-\centering
-\includegraphics[width=.8\textwidth]{Figures/leg}
-\decoRule
-\caption[Rig gamba]{Esempio di un semplice rig per la gamba}
-\label{fig:leg}
-\end{figure}
-
 Nel caso di rotazione euleriana è anche necessario scegliere l'ordine degli assi, in base a quelli sui quali verrà effettuata la rotazione:
 \begin{itemize}
     \item più usato -> anello (Figura \ref{fig:euler}) esterno, allineato globalmente/osso genitore;
     \item secondo più usato -> anello interno, rotazione locale;
     \item meno usato/non usato -> secondo, causa gimbal lock;
 \end{itemize}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[width=.8\textwidth]{Figures/leg}
+\decoRule
+\caption[Rig gamba]{Esempio di un semplice rig per la gamba}
+\label{fig:leg}
+\end{figure}
 
 \newpage
 \subsection{Arti inferiori}

@@ -159,7 +159,7 @@ La prima, come suggerisce il nome, è la più artistica.
 Si tratta fondamentalmente di disegnare sul modello.
 Questa tecnica, seppure non sia affatto automatizzabile, è la più utilizzata, in quanto spesso non c'è altro modo di aggiungere dettagli irregolari. Essa è ad esempio stata usata per aggiungere il dettaglio ai capelli del capitano, per non dare l'idea che la sua chioma fosse un blocco unico, ma formato da tanti capelli.
 
-Per i capelli di tutti gli altri personaggi, la texture è stata generata proceduralmente. Questo è stato possibile poiché, avendo questi altri, dei capelli lunghi, questi sono stati modellati con l'uso di curve in varie ciocche.
+Per i capelli di tutti gli altri personaggi, la texture è stata generata proceduralmente (vedi Figura \ref{fig:dialog}). Questo è stato possibile poiché, avendo questi altri, dei capelli lunghi, questi sono stati modellati con l'uso di curve in varie ciocche.
 Dopodiché è stato possibile definire la texture in modo che fosse formata da tante linee che partissero da un estremo della curva all'altro.
 
 Ad ogni modo le texture non sono usate solo per dare colore ad un oggetto. Esse sono utilizzate anche per aggiungere dettagli in rilievo.
@@ -207,6 +207,27 @@ Per generare il rig avanzato, è stato in parte usato rigify \cite{blendDoc}: un
 Purtroppo questa tecnologia è stata scoperta verso la fine del progetto e non è quindi stata utilizzata al massimo. 
 Infatti i rig avanzati non sono quasi per nulla stati utilizzati, anche perché, essendo io e Uras già familiari nell'animare direttamente il meta-rig, si è preferito procedere direttamente alla realizzazione delle animazioni.
 In Figura \ref{fig:rig} è possibile vedere il rig finito applicato ad un modello.
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Figures/screen4}
+\decoRule
+\caption[Scena esempio 1]{In figura è rappresentata una delle prime scene, in cui il ragazzo si sveglia.}
+\label{fig:eg1}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Figures/screen1}
+\decoRule
+\caption[Scena esempio 2]{In figura sono rappresentati capitano e capitana che si preparano ad uno scontro a fuoco.}
+\label{fig:eg2}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Figures/screen2}
+\decoRule
+\caption[Scena esempio 3]{In figura sono rappresentati due robot e la capitana, a mezz'aria, che sferra un calcio ad uno di essi.}
+\label{fig:eg3}
+\end{figure}
 
 \subsection{Keyframe e metodi di animazione}
 Ora che è possibile animare i modelli deformandoli, si può procedere con la realizzazione delle animazioni, precedentemente descritte al Capitolo \ref{Chapter4}.
@@ -221,6 +242,13 @@ Ha il vantaggio di essere naturale: per arrivare in una determinata posizione de
 Di conseguenza anche le animazione che ne risultano hanno un aspetto più naturale.
 Questo metodo però rende difficile pianificare le azioni future per questo motivo non è ottimale.
 
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Figures/screen5}
+\decoRule
+\caption[Scena esempio 4]{In figura è rappresentato il ragazzo che spinge uno dei banditi spaziali.}
+\label{fig:eg4}
+\end{figure}
 Al contrario, animare da posizione a posizione permette di pianificare un'intera scena definendo delle posizioni chiave.
 Queste ultime, anche dette \emph{key-frame}, provengono direttamente dallo storyboard e definiscono cosa deve accadere in una scena.
 Definite queste posizioni principali, distribuite nella sequenza dei frame della scena, si possono aggiungere i frame di intermezzo tra due posizioni.
@@ -232,13 +260,27 @@ Va aggiunto però che, per rendere le animazioni più naturali, dopo aver defini
 Questi ultimi sono stati modificati con un approccio dal primo verso l'ultimo.
 In questo modo l'azione è più naturale, e spezza la linearità dell'interpolazione che, essendo calcolata dal computer, non mostra mai un movimento realistico fin da subito.
 È quindi più giusto dire che nella realizzazione del trailer, è stato fatto uso di una combinazione delle due tecniche.
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Figures/screen3}
+\decoRule
+\caption[Scena esempio 5]{In figura sono rappresentati Capitana, ragazzo e Capitano mentre corrono, per seminare i loro inseguitori.}
+\label{fig:eg5}
+\end{figure}
 
 \subsection{Animazioni cicliche}
 Inoltre, per le animazioni più comuni, esse sono state rese cicliche, per poterle iterare per la durata necessaria, e riutilizzarle in ogni scena necessaria.
 In questo modo le animazioni sono state modularizzate, ovvero spezzate in più azioni ripetibili.
-Alcune animazioni come la camminata, infatti, seguono dei pattern ben definiti, costituidi da varie fasi e,
+Alcune animazioni come la camminata, infatti, seguono dei pattern ben definiti, costituiti da varie fasi e,
 grazie alla loro uniformità è possibile renderle cicliche in maniera tale da non dover rifare la stessa animazione più volte.
 
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Figures/screen6}
+\decoRule
+\caption[Scena esempio 6]{In figura è rappresentato il tenente mentre spara ad uno dei banditi spaziali.}
+\label{fig:eg6}
+\end{figure}
 Nel caso del ciclo della camminata queste fasi sono dette a supporto singolo e doppio supporto \cite{Parent:2012:CAA:2385444}.
 Quest'ultima inizia con la posa di \emph{contatto}, in cui il secondo piede poggia a terra col tallone, e termina con la posizione di passaggio.
 Viceversa la fase a singolo supporto inizia dalla posizione di passaggio e termina con la posizione di contatto.
@@ -254,6 +296,13 @@ Il percorso non è altro che una curva, solitamente NURBS o B-spline.
 Il vantaggio di usare le curve in questo caso è che il percorso risultante avrà curve molto soffici.
 Inoltre è possibile, attraverso i punti di controllo, modificare la curva a posteriori e, con essa, il modello si sposterà di conseguenza.
 
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Figures/screen7}
+\decoRule
+\caption[Animazione dialoghi]{In figura è rappresentato il ragazzo mentre viene animato per un dialogo}
+\label{fig:dialog}
+\end{figure}
 \subsection{Espressioni e Dialoghi}
 Un altro aspetto importante delle animazioni, soprattutto in questo progetto, sono i dialoghi.
 Nonostante si sia scelto di non doppiare i dialoghi dei personaggi, ma piuttosto tenere una traccia audio di sottofondo, per aggiungere drammaticità, è comunque stato necessario animare le facce dei personaggi per permettergli di parlare e esprimere sentimenti attraverso espressioni facciali.
